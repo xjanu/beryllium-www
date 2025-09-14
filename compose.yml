@@ -3,11 +3,9 @@ services:
     &webserver-common
     image: nginx:latest
     ports:
-      - 8080:80  # default for dev
+      - 8080:80
     profiles: ["dev"]
   webserver-prod:
     <<: *webserver-common
-    ports:
-      - 80:80
     restart: always
     profiles: ["prod"]
