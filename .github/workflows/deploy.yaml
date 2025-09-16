@@ -23,5 +23,5 @@ jobs:
           ssh -i ~/.ssh/id_beryllium www@beryllium.martinjanu.eu <<EOF
           cd beryllium-www
           git pull --force
-          echo `date`>>~/deploy.txt
+          docker compose --profile prod up --detach
           EOF
