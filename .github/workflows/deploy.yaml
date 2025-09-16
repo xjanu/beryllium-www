@@ -2,7 +2,7 @@ name: Continuous deployment
 
 on:
   push:
-    branches: [ "production" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
