@@ -1,0 +1,27 @@
+name: Continuous deployment
+
+on:
+  push:
+    branches: [ "production" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" >~/.ssh/id_beryllium
+          chmod 600 ~/.ssh/id_beryllium
+          echo "$SSH_KNOWN_HOSTS" >~/.ssh/known_hosts
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+      - name: Deploy
+        run: |
+          ssh -i ~/.ssh/id_beryllium www@beryllium.martinjanu.eu <<EOF
+          cd beryllium-www
+          git pull --force
+          echo `date`>>~/deploy.txt
+          EOF
