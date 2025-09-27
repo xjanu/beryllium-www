@@ -1,0 +1,9 @@
+FROM alpine:3
+
+RUN ["apk", "add", "python3"]
+
+WORKDIR /srv/
+COPY rng.py ./
+EXPOSE 8080
+
+ENTRYPOINT ["python3", "rng.py"]

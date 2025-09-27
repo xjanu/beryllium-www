@@ -1,11 +1,20 @@
 services:
   webserver:
     &webserver-common
-    image: nginx:latest
+    image: nginx:stable
     ports:
       - 8080:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/cache:/var/cache/nginx:rw
+      - ./nginx/pid:/var/run:rw
     profiles: ["dev"]
   webserver-prod:
     <<: *webserver-common
     restart: always
     profiles: ["prod"]
+  rng:
+    build:
+      dockerfile: dockerfile
+      context: rng
+    command: sleep 1d

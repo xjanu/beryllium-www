@@ -1,0 +1,4 @@
+/pid/*
+!/pid/.gitkeep
+/cache/*
+!/cache/.gitkeep
