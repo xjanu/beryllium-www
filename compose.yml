@@ -8,6 +8,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/cache:/var/cache/nginx:rw
       - ./nginx/pid:/var/run:rw
+      - ./nginx/static:/www/static:ro
     profiles: ["dev"]
   webserver-prod:
     <<: *webserver-common

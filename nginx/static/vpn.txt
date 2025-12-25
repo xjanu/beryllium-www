@@ -1,0 +1,10 @@
+[Interface]
+Address = 10.10.42.X/24 2a01:4f8:c17:566e:42::X/128
+PrivateKey = PRIVATE-KEY
+
+[Peer]
+PublicKey = djzgmlXHuy9qktVkDSirwR9ft2HwwhLT36W5zT5QslI=
+PresharedKey = PRESHARED-KEY
+Endpoint = martinjanu.eu:51820
+AllowedIPs = 10.10.42.0/24, 2a01:4f8:c17:566e:42::/112
+PersistentKeepalive = 20
