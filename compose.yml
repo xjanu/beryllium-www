@@ -9,6 +9,7 @@ services:
       - ./nginx/cache:/var/cache/nginx:rw
       - ./nginx/pid:/var/run:rw
       - ./nginx/static:/www/static:ro
+      - acme-challenge:/www/acme:ro
     profiles: ["dev"]
   webserver-prod:
     <<: *webserver-common
@@ -19,3 +20,17 @@ services:
       dockerfile: dockerfile
       context: rng
     restart: always
+  acme:
+    image: neilpang/acme.sh
+    volumes:
+      - acme-workdir:/acme.sh:rw
+      - acme-challenge:/var/www/acme:rw
+    environment:
+      - TZ=UTC
+    command: daemon
+    restart: always
+    profiles: ["prod"]
+
+volumes:
+  acme-workdir:
+  acme-challenge:
