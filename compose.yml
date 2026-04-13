@@ -10,8 +10,8 @@ services:
       - 8443:443
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/cache:/var/cache/nginx:rw
-      - ./nginx/pid:/var/run:rw
+      - nginx-cache:/var/cache/nginx:rw
+      - nginx-pid:/var/run:rw
       - ./nginx/static:/www/static:ro
       - acme-challenge:/www/acme:ro
       - acme-certificates:/etc/nginx/ssl:ro
@@ -73,6 +73,8 @@ services:
     restart: always
 
 volumes:
+  nginx-cache:
+  nginx-pid:
   acme-workdir:
   acme-challenge:
   acme-certificates:
