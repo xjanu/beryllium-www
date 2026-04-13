@@ -9,7 +9,7 @@ services:
       - 8080:80
       - 8443:443
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/conf.dev.d:/etc/nginx/conf.d:ro
       - nginx-cache:/var/cache/nginx:rw
       - nginx-pid:/var/run:rw
       - ./nginx/static:/www/static:ro
@@ -21,6 +21,13 @@ services:
     profiles: ["dev"]
   webserver-prod:
     <<: *webserver-common
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - nginx-cache:/var/cache/nginx:rw
+      - nginx-pid:/var/run:rw
+      - ./nginx/static:/www/static:ro
+      - acme-challenge:/www/acme:ro
+      - acme-certificates:/etc/nginx/ssl:ro
     restart: always
     profiles: ["prod"]
 
