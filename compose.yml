@@ -61,11 +61,11 @@ services:
                 --issue \
                 -d martinjanu.eu \
                 --webroot /var/www/acme \
-                -d www.martinjanu.eu -d upgreat.martinjanu.eu &&
+                -d www.martinjanu.eu -d upgreat.martinjanu.eu;
         acme.sh --install-cert \
                 -d martinjanu.eu \
                 --key-file /var/ssl/key.pem \
-                --fullchain-file /var/ssl/fullchain.pem &&
+                --fullchain-file /var/ssl/fullchain.pem;
         exec /entry.sh daemon
       '
     depends_on:
