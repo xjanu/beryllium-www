@@ -1,21 +1,87 @@
 services:
+
   webserver:
     &webserver-common
-    image: nginx:stable
+    build:
+      dockerfile: dockerfile
+      context: nginx
     ports:
       - 8080:80
+      - 8443:443
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/cache:/var/cache/nginx:rw
-      - ./nginx/pid:/var/run:rw
+      - ./nginx/conf.dev.d:/etc/nginx/conf.d:ro
+      - nginx-cache:/var/cache/nginx:rw
+      - nginx-pid:/var/run:rw
       - ./nginx/static:/www/static:ro
+      - acme-challenge:/www/acme:ro
+      - acme-certificates:/etc/nginx/ssl:ro
+    depends_on:
+      - rng
+      - cert-init
     profiles: ["dev"]
   webserver-prod:
     <<: *webserver-common
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - nginx-cache:/var/cache/nginx:rw
+      - nginx-pid:/var/run:rw
+      - ./nginx/static:/www/static:ro
+      - acme-challenge:/www/acme:ro
+      - acme-certificates:/etc/nginx/ssl:ro
     restart: always
     profiles: ["prod"]
+
+  cert-init:
+    image: nginx:stable # naughty
+    volumes:
+      - acme-certificates:/acme-certificates:rw
+    command: >
+      bash -c '
+        set -e
+        if [ ! -f /acme-certificates/fullchain.pem ]; then
+          openssl req -x509 -nodes -newkey rsa:2048 \
+            -days 365 \
+            -keyout /acme-certificates/key.pem \
+            -out    /acme-certificates/fullchain.pem \
+            -subj "/CN=localhost"
+        fi'
+    restart: "no"
+
+  acme:
+    image: neilpang/acme.sh
+    volumes:
+      - acme-workdir:/acme.sh:rw
+      - acme-challenge:/var/www/acme:rw
+      - acme-certificates:/var/ssl:rw
+    environment:
+      - TZ=UTC
+    command: >
+      sh -c '
+        acme.sh --server letsencrypt \
+                --issue \
+                -d martinjanu.eu \
+                --webroot /var/www/acme \
+                -d www.martinjanu.eu -d upgreat.martinjanu.eu &&
+        acme.sh --install-cert \
+                -d martinjanu.eu \
+                --key-file /var/ssl/key.pem \
+                --fullchain-file /var/ssl/fullchain.pem &&
+        exec /entry.sh daemon
+      '
+    depends_on:
+      - webserver-prod
+    restart: always
+    profiles: ["prod"]
+
   rng:
     build:
       dockerfile: dockerfile
       context: rng
     restart: always
+
+volumes:
+  nginx-cache:
+  nginx-pid:
+  acme-workdir:
+  acme-challenge:
+  acme-certificates:
