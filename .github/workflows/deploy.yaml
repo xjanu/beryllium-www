@@ -22,6 +22,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_beryllium www@beryllium.martinjanu.eu <<EOF
           cd beryllium-www
+          git switch main
+          git reset --hard
           git pull --force
           docker compose --profile prod build
           docker compose -p beryllium-www down --remove-orphans
