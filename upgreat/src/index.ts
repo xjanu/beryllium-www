@@ -4,6 +4,8 @@ import fastifyView from '@fastify/view'
 import Nunjucks from 'nunjucks'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
+
+import static_route from './static.ts'
 import { usersTable } from './db/schema.ts'
 
 const server = fastify()
@@ -23,12 +25,12 @@ server.register(fastifyView, {
   root: "templates/",
 })
 
-server.get('/ping', async (request, reply) => {
-  return 'ping pong\n'
-})
-
 server.get("/", async (req, reply) => {
   return reply.viewAsync("index.njk", { name: "User" });
+})
+
+server.get('/ping', async (request, reply) => {
+  return 'ping pong\n'
 })
 
 server.get("/pg", async (req, reply) => {
@@ -45,6 +47,8 @@ server.get("/pg", async (req, reply) => {
 
   return users;
 })
+
+server.register(static_route)
 
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {
