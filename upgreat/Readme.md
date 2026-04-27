@@ -3,7 +3,6 @@ UpGREAT! camp website
 
 ## TODO
 - infra
-  - fastify/point-of-view + handlebars
   - database
 - website
   - static landing page

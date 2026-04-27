@@ -19,6 +19,8 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "fastify": "^5.8.5"
+    "@fastify/view": "^11.1.1",
+    "fastify": "^5.8.5",
+    "handlebars": "^4.7.9"
   }
 }
