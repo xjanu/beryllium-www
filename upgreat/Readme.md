@@ -3,7 +3,14 @@ UpGREAT! camp website
 
 ## TODO
 - infra
-  - database + migration
+  - database backups?
+- file structure
+  - backend
+  - api
+  - frontend
+  - static
+  - db?
+  - templates?
 - website
   - static landing page
   - style.css
@@ -29,7 +36,7 @@ UpGREAT! camp website
 - typescript
 - fastify backend
 - @fastify/view + handlebars for templates
-- TODO: decide on database and migration tool
+- postgres + drizzle ORM/migrations
 
 ## Update, Build, Develop, Deploy
 TODO
