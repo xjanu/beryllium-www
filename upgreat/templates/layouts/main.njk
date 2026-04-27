@@ -7,7 +7,19 @@
     <title>{{ title }}</title>
 </head>
 <body>
-    <h1>{{ title }}</h1>
-    {% block maincontent %}{% endblock %}
+    <header>
+        <a id="logo" href="/">
+            <span>UpGREAT</span>
+        </a>
+        <nav>
+                <a href="/">Domov</a>
+                <a>O nás</a>
+                <a>Kontakt</a>
+        </nav>
+    </header>
+    <main>
+        <h1>{{ title }}</h1>
+        {% block maincontent %}{% endblock %}
+    </main>
 </body>
 </html>
