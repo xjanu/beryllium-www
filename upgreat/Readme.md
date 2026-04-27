@@ -3,9 +3,11 @@ UpGREAT! camp website
 
 ## TODO
 - infra
-  - database
+  - database + migration
 - website
   - static landing page
+  - style.css
+  - favicon.{png,ico}
   - signup form
     - login
     - confirm email?
@@ -17,6 +19,11 @@ UpGREAT! camp website
   - domain name
   - standalone VPS
   - containarise
+  - static files should still be templated (Same layout), but compiled once
+    and served by nginx
+  - dynamic files will be in /auth namespace and rendered on-the-fly
+  - api endpoints should be separated from rendered html
+  - client-side javascript should also be compiled from typescript
 
 ## Technologies
 - typescript
