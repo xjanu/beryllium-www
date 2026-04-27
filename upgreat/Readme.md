@@ -35,7 +35,7 @@ UpGREAT! camp website
 ## Technologies
 - typescript
 - fastify backend
-- @fastify/view + handlebars for templates
+- @fastify/view + nunjucks for templates
 - postgres + drizzle ORM/migrations
 
 ## Update, Build, Develop, Deploy

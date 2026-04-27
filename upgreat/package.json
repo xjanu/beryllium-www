@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "@types/nunjucks": "^3.2.6",
     "@types/pg": "^8.20.0",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.21.0",
@@ -25,7 +26,7 @@
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "fastify": "^5.8.5",
-    "handlebars": "^4.7.9",
+    "nunjucks": "^3.2.4",
     "pg": "^8.20.0"
   }
 }

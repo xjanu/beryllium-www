@@ -1,15 +1,15 @@
 import 'dotenv/config'
 import fastify from 'fastify'
 import fastifyView from '@fastify/view'
-import Handlebars from 'handlebars'
+import Nunjucks from 'nunjucks'
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { usersTable } from './db/schema.ts';
+import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import { usersTable } from './db/schema.ts'
 
 const server = fastify()
 
 const db = drizzle(process.env.DATABASE_URL!);
-if (process.env.PROD === 'true') {
+if (process.env.NODE_ENV === 'production') {
   await migrate(db, {
     migrationsFolder: "./drizzle-migrations",
   });
@@ -17,9 +17,10 @@ if (process.env.PROD === 'true') {
 
 server.register(fastifyView, {
   engine: {
-    handlebars: Handlebars
+    nunjucks: Nunjucks,
   },
-  root: "templates/"
+  options: {noCache: process.env.NODE_ENV !== 'production'},
+  root: "templates/",
 })
 
 server.get('/ping', async (request, reply) => {
@@ -27,7 +28,7 @@ server.get('/ping', async (request, reply) => {
 })
 
 server.get("/", async (req, reply) => {
-  return reply.viewAsync("index.hbs", { name: "User" });
+  return reply.viewAsync("index.njk", { name: "User" });
 })
 
 server.get("/pg", async (req, reply) => {
