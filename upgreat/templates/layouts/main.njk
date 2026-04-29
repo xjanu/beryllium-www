@@ -9,14 +9,20 @@
 <body>
     <header>
         <a id="logo" href="/">
-            <span>UpGREAT</span>
+            <small><span>UpGreat<br>
+            (Logo placeholder)</span></small>
         </a>
-        <nav>
-                <a href="/">Domov</a>
-                <a>O nás</a>
-                <a>Kontakt</a>
+
+        <input type="checkbox" id="menu-toggle" hidden>
+        <label for="menu-toggle" class="burger">Menu ☰</label>
+        <nav class="menu">
+            <a href="/">Domov</a>
+            <a>O&nbsp;nás</a>
+            <a>Kontakt</a>
+            <a>Registrácia</a>
         </nav>
     </header>
+
     <main>
         <h1>{{ title }}</h1>
         {% block maincontent %}{% endblock %}

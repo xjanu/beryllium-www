@@ -1,5 +1,5 @@
 /* Based off of:
-   http://meyerweb.com/eric/tools/css/reset/ 
+   http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 
@@ -15,8 +15,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -27,7 +27,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -53,11 +53,24 @@ table {
 /* The rest of this file is licensed under the project-wide license.
 */
 
+:root {
+    --primary-color: #9c98d6;
+    --primary-color-light: #b5b4d6;
+    --secondary-color: #F6AF65;
+    --secondary-color-light: #f7d1a9;
+
+    --header-line-height: 3rem;
+}
+
+span {
+    display: inline-block;
+}
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.2;
+    font-family: sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.2;
 }
 
 h1 {
@@ -84,21 +97,53 @@ img {
     width: 100%;
 }
 
+small, .small {
+    font-size: 80%;
+    line-height: 1.2;
+}
+
 body {
-  font-family: serif;
-  font-style: normal;
-  line-height: 1.6;
+    font-family: serif;
+    font-style: normal;
+    line-height: 1.6;
 }
 
 header {
+    position: sticky;
+    top: 0;
+    width: 100%;
     display: flex;
-    align-items: flex-start;
     column-gap: 1rem;
+
+    background-color: var(--primary-color);
+    font-family: sans;
+    font-size: 110%;
+}
+
+header>#logo {
+    height: var(--header-line-height);
 }
 
 header>nav {
     display: flex;
-    column-gap: 1rem;
+    height: 100%;
+    flex-wrap: wrap;
+}
+
+header>nav>a, header>.burger {
+    height: var(--header-line-height);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 0.5em;
+}
+
+header>.burger {
+    display: none;
+}
+
+header>nav>a:hover, header>.burger:hover {
+    background-color: var(--primary-color-light);
 }
 
 main>* {
@@ -108,4 +153,26 @@ main>* {
 
 main>*.wide {
     max-width: unset;
+}
+
+@media only screen and (max-width: 600px) {
+
+    header {
+        position: absolute;
+        right: 0;
+        width: fit-content;
+        min-width: 10rem;
+    }
+
+    header, header>nav {
+        flex-direction: column;
+    }
+
+    header>nav, header>#logo {
+        display: none;
+    }
+
+    header>#menu-toggle:checked + .burger + nav {
+        display: block;
+    }
 }
