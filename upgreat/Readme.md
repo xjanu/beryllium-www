@@ -12,12 +12,10 @@ UpGREAT! camp website
   - db?
   - templates?
 - website
-  - static landing page
-  - style.css
   - favicon.{png,ico}
   - signup form
-    - login
-    - confirm email?
+  - login
+  - show signups
   - link shortener
   - admin
     - file upload
@@ -29,6 +27,7 @@ UpGREAT! camp website
   - static files should still be templated (Same layout), but compiled once
     and served by nginx
   - dynamic files will be in /auth namespace and rendered on-the-fly
+  - automatic nbsp for templates
   - api endpoints should be separated from rendered html
   - client-side javascript should also be compiled from typescript
 
