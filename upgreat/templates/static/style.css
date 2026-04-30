@@ -63,6 +63,7 @@ table {
     --gray-light: #e0e0e0;
     --text-color: #505050;
     --text-color-strong: #000000;
+    --background-color: #ffffff;
 
     --header-line-height: 3rem;
 }
@@ -98,17 +99,17 @@ h4 {
     font-size: 125%;
 }
 
-a {
+a[href] {
     color: var(--primary-color-dark);
     font-weight: 600;
     text-decoration: none;
 }
 
-a:hover {
+a[href]:hover {
     text-decoration: underline;
 }
 
-a.fancy {
+a[href].fancy {
     display: block;
     width: fit-content;
     margin: 2rem;
@@ -120,7 +121,7 @@ a.fancy {
     background: linear-gradient(12deg, rgba(247, 225, 203, 1) 0%, rgba(247, 209, 169, 1) 50%, rgba(246, 175, 101, 1) 100%);
 }
 
-a.fancy:hover {
+a[href].fancy:hover {
     border: 0.3rem solid var(--secondary-color-light);
     border-radius: 0.5rem;
     background: linear-gradient(24deg, rgba(247, 225, 203, 1) 0%, rgba(247, 209, 169, 1) 50%, rgba(246, 175, 101, 1) 100%);
@@ -194,11 +195,72 @@ table td.textual {
     text-align: left;
 }
 
+form {
+    background: var(--secondary-color-lighter);
+    font-family: sans-serif;
+}
+
+label {
+    display: inline-block;
+    padding-top: 0.5em;
+    color: var(--text-color-strong);
+    font-weight: 500;
+}
+
+form textarea {
+    width: 100%;
+}
+
+form fieldset {
+    padding: 0.5em 0.5em;
+    margin: 0.5em 0;
+    border: 2px solid var(--secondary-color-light);
+}
+
+form fieldset legend {
+    margin-top: 0.5em;
+    line-height: 1.2;
+    font-size: 150%;
+}
+
+form fieldset fieldset {
+    border: 2px solid var(--secondary-color);
+    background: var(--secondary-color-light);
+}
+
+form fieldset fieldset legend {
+    font-size: 125%;
+}
+
+form fieldset.radio {
+    border: none;
+    padding: initial;
+}
+
+form fieldset.radio legend {
+    margin: initial;
+    line-break: initial;
+    font-size: initial;
+    color: var(--text-color-strong);
+    font-weight: 500;
+    padding-top: 0.5em;
+}
+
+form fieldset.radio label {
+    padding-top: 0;
+}
+
+input,
+button {
+    font-size: 125%;
+}
+
 body {
     font-family: serif;
     font-style: normal;
     line-height: 1.6;
     color: var(--text-color);
+    background: var(--background-color);
 }
 
 header {
@@ -231,7 +293,7 @@ header>.burger {
     display: none;
 }
 
-header>nav>a,
+header>nav>a[href],
 header>.burger {
     align-items: center;
     height: var(--header-line-height);
