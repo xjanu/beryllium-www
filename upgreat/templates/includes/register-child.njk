@@ -1,4 +1,4 @@
-<fieldset name="children[{{child_number}}]">
+<fieldset class="nth-child" name="children[{{child_number}}]">
     <legend>{{child_number + 1}}. dieťa</legend>
     <label>
         Meno<br>
@@ -82,8 +82,9 @@
 
 {% set child_number = child_number + 1 %}
 {% if child_number < max_children %}
-<button hidden>Pridať {{child_number + 1}}. dieťa</button>
 {% include "includes/register-child.njk" %}
 {% else %}
-<p>Maximálny počet detí na jeden formulár je {{max_children}}.</p>
+<button type="button" name="add-child" value="{{child_number}}" hidden>Pridať dieťa</button>
+<button type="button" name="del-child" value="{{child_number}}" hidden>Odobrať dieťa</button>
+<p id="max-children">Maximálny počet detí na jeden formulár je {{max_children}}.</p>
 {% endif %}
