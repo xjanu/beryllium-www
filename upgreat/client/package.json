@@ -1,0 +1,14 @@
+{
+  "name": "upgreat-client",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node build.js --watch",
+    "build": "node build.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.3"
+  }
+}

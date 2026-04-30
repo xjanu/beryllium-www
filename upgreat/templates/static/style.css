@@ -64,6 +64,8 @@ table {
     --text-color: #505050;
     --text-color-strong: #000000;
     --background-color: #ffffff;
+    --warn-color-border: #F6AF65;
+    --warn-color-background: #f7d1a9;
 
     --header-line-height: 3rem;
 }
@@ -139,6 +141,14 @@ small,
 }
 
 strong {
+    color: var(--text-color-strong);
+    font-weight: 500;
+}
+
+.warn {
+    padding: 0.5rem;
+    border: 0.3rem solid var(--warn-color-border);
+    background-color: var(--warn-color-background);
     color: var(--text-color-strong);
     font-weight: 500;
 }
