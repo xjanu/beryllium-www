@@ -14,6 +14,16 @@ UpGREAT! camp website
 - website
   - favicon.{png,ico}
   - signup form
+    - frontend
+      - validate
+        - RČ
+        - days
+        - error messages
+      - price calculator
+    - backend
+      - save
+      - validate
+      - return something meaningful
   - login
   - show signups
   - link shortener

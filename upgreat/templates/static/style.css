@@ -64,6 +64,8 @@ table {
     --text-color: #505050;
     --text-color-strong: #000000;
     --background-color: #ffffff;
+    --error-color-text: #C00000;
+    --error-color-border: #FF0000;
     --warn-color-border: #F6AF65;
     --warn-color-background: #f7d1a9;
 
@@ -83,6 +85,11 @@ h6 {
     font-family: sans-serif;
     font-style: normal;
     line-height: 1.2;
+    margin-top: 1em;
+}
+
+p {
+    margin-top: 1em;
 }
 
 h1 {
@@ -208,6 +215,7 @@ table td.textual {
 form {
     background: var(--secondary-color-lighter);
     font-family: sans-serif;
+    padding:1em;
 }
 
 label {
@@ -261,8 +269,27 @@ form fieldset.radio label {
 }
 
 input,
-button {
+button,
+textarea {
     font-size: 125%;
+    border: 2px solid var(--secondary-color);
+}
+
+input:user-invalid,
+button:user-invalid,
+textarea:user-invalid {
+    font-size: 125%;
+    border: 2px solid var(--error-color-border);
+}
+
+label:has(>input[required])::after {
+    content: "*";
+    color: var(--error-color-text)
+}
+
+form:has(label>input[required])::before {
+    content: "Povinné údaje sú vyznačené *";
+    color: var(--error-color-text)
 }
 
 body {
@@ -318,8 +345,10 @@ header>.burger:hover {
 
 main>* {
     max-width: 50rem;
-    margin: 0.7em auto;
-    padding: 0 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 main>*.wide {

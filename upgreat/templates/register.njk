@@ -27,15 +27,18 @@
         </p>
         <label>
             Meno a priezvisko<br>
-            <input type="text" name="guardian-name" autocomplete="name" />
+            <input type="text" name="guardian-name" autocomplete="name"
+                required minlength="2" maxlength="100"/>
         </label><br>
         <label>
             Email<br>
-            <input type="email" name="guardian-email" autocomplete="email" />
+            <input type="email" name="guardian-email" autocomplete="email"
+                required/>
         </label><br>
         <label>
             Telefónne číslo<br>
-            <input type="tel" name="guardian-phone" autocomplete="tel" />
+            <input type="tel" name="guardian-phone" autocomplete="tel"
+                required pattern="\+?\d( ?\d){9,19}"/>
         </label><br>
     </fieldset>
 
@@ -62,6 +65,7 @@
             údajov a poskytnutie súhlasov s uvedeným:
         </p>
 
+        <hr>
         <h4>Súhlas so spracovaním osobných údajov (GDPR):</h4>
         <p>
             Vyplnením osobných údajov v tomto formulári udeľujem
@@ -83,17 +87,19 @@
                 Sídlo: Bočná 100, 821 04 Bratislava - Ružinov
             </strong>
         </p>
+        <hr>
+
         <label>
             Potvrdzujem správnosť všetkých údajov v tomto formulári, súhlasím
             s účasťou dieťaťa/detí na tábore a potvrdzujem, že zákonný zástupca
             dieťaťa/detí s jeho/ich účasťou na tábore súhlasí.<br>
-            <input type="checkbox" name="agree-correct"> Potvrdzujem
+            <input type="checkbox" name="agree-correct" required> Potvrdzujem
         </label>
         <label>
             Súhlasím so spracovaním osobných údajov na účely organizácie tábora
             a dokladovania výdavkov spojených s táborom pre sponzorov, ktorí
             takéto doklady vyžadujú.<br>
-            <input type="checkbox" name="agree-gdpr"> Potvrdzujem
+            <input type="checkbox" name="agree-gdpr" required> Potvrdzujem
         </label>
         <label>
             Súhlasím s fotodokumentáciou tábora a následným zverejňovaním
@@ -101,7 +107,7 @@
             účastník tábora bude na týchto fotografiách viditeľný a že
             fotografie budú využité na účely propagácie tábora a dokladovania
             jeho priebehu pre sponzorov, ktorí takýto dôkaz požadujú.<br>
-            <input type="checkbox" name="agree-photo"> Potvrdzujem
+            <input type="checkbox" name="agree-photo" required> Potvrdzujem
         </label>
     </fieldset>
 
