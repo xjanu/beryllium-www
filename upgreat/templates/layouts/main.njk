@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>{{ page_title }}{% if page_title %} | {% endif %}UpGREAT</title>
+</head>
+<body>
+    <header>
+        <a id="logo" href="/">
+            <small><span>UpGreat<br>
+            (Logo placeholder)</span></small>
+        </a>
+
+        <input type="checkbox" id="menu-toggle" hidden>
+        <label for="menu-toggle" class="burger">Menu ☰</label>
+        <nav class="menu">
+            <a href="/">Domov</a>
+            <a href="/about">O&nbsp;nás</a>
+            <a href="/contact">Kontakt</a>
+            <a href="/register">Registrácia</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block maincontent %}{% endblock %}
+    </main>
+</body>
+</html>

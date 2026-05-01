@@ -1,0 +1,119 @@
+{% extends "layouts/main.njk" %}
+
+{% set page_title = "Registrácia" %}
+
+{% block maincontent %}
+<h1>Registračný formulár</h1>
+<p>
+    Prosím vyplňte údaje v tomto formulári pravdivo a presne, vyhneme sa tým
+    nepríjemnostiam s hľadaním a opravovaním chýb.
+</p>
+
+<form method="post">
+
+    <script src="/scripts/register.js" defer></script>
+    <noscript><div class="warn">
+        Nepodarilo sa načítať JavaScript. Niektoré funkcie stránky môžu byť
+        pokazené!
+    </div></noscript>
+
+    <fieldset name="guardian">
+        <legend>Údaje o zákonnom zástupcovi</legend>
+        <p>
+            Údaje o Vás potrebujeme aby sme Vám mohli posielať podrobné
+            informácie o tábore a ďalších aktivitách, ktoré organizujeme. Tiež
+            Vás vďaka nim môžeme v prípade potreby  kontaktovať v priebehu
+            tábora.
+        </p>
+        <label>
+            Meno a priezvisko<br>
+            <input type="text" name="guardian-name" autocomplete="name"
+                required minlength="2" maxlength="100"/>
+        </label><br>
+        <label>
+            Email<br>
+            <input type="email" name="guardian-email" autocomplete="email"
+                required/>
+        </label><br>
+        <label>
+            Telefónne číslo<br>
+            <input type="tel" name="guardian-phone" autocomplete="tel"
+                required pattern="\+?\d( ?\d){9,19}"/>
+        </label><br>
+    </fieldset>
+
+    <fieldset name="children">
+        <legend>Údaje o deťoch</legend>
+        <p>
+            Údaje o dieťati nám pomáhajú vytvoriť si prehľad o tom, aké deti máme na
+            tábore očakávať. Na ich základe môžeme pripraviť program, ktorý bude
+            šitý na mieru práve im.
+        </p>
+        <p>
+            Ďalšie údaje potrebujeme zo zákonných dôvodov, keďže v priebehu tábora
+            preberáme za deti zodpovednosť.
+        </p>
+        {% set child_number = 0 %}
+        {% set max_children = 5 %}
+        {% include "includes/register-child.njk" %}
+    </fieldset>
+
+    <fieldset name="agreement">
+        <legend>Potvrdenia a súhlasy</legend>
+        <p>
+            V poslednej časti Vás prosíme o potvrdenie správnosti vyplnených
+            údajov a poskytnutie súhlasov s uvedeným:
+        </p>
+
+        <hr>
+        <h4>Súhlas so spracovaním osobných údajov (GDPR):</h4>
+        <p>
+            Vyplnením osobných údajov v tomto formulári udeľujem
+            ako zákonný zástupca dotknutej osoby
+            súhlas so spracovaním osobných údajov v zmysle ustanovení § 14 ods.
+            1 zákona č. 18/2018 Z.z.. Bol/a/ som poučený/á/, že v zmysle ustanovení §
+            14 ods. 3 zákona č. 18/2018 Z.z. môžem ako dotknutá osoba   kedykoľvek odvolať svoj súhlas na
+            spracovanie osobných údajov, ktoré sa ma týkajú. Ďalej som bol/a/
+            informovaný/á/, že odvolanie súhlasu nemá vplyv na zákonnosť spracovania
+            osobných údajov založeného na súhlase pred jeho odvolaním, to je pred
+            poskytnutím súhlasu a tiež, že ako dotknutá osoba,  môžem súhlas odvolať rovnakým spôsobom, ako
+            ho udelil/a/.
+        </p>
+        <p>
+            Tento súhlas udeľujem pre správcu:<br>
+            <strong>
+                Občianske združenie ..................................<br>
+                IČO: ..................................<br>
+                Sídlo: Bočná 100, 821 04 Bratislava - Ružinov
+            </strong>
+        </p>
+        <hr>
+
+        <label>
+            Potvrdzujem správnosť všetkých údajov v tomto formulári, súhlasím
+            s účasťou dieťaťa/detí na tábore a potvrdzujem, že zákonný zástupca
+            dieťaťa/detí s jeho/ich účasťou na tábore súhlasí.<br>
+            <input type="checkbox" name="agree-correct" required> Potvrdzujem
+        </label>
+        <label>
+            Súhlasím so spracovaním osobných údajov na účely organizácie tábora
+            a dokladovania výdavkov spojených s táborom pre sponzorov, ktorí
+            takéto doklady vyžadujú.<br>
+            <input type="checkbox" name="agree-gdpr" required> Potvrdzujem
+        </label>
+        <label>
+            Súhlasím s fotodokumentáciou tábora a následným zverejňovaním
+            vyhotovených fotografií na sociálnych sieťach. Som si vedomý, že
+            účastník tábora bude na týchto fotografiách viditeľný a že
+            fotografie budú využité na účely propagácie tábora a dokladovania
+            jeho priebehu pre sponzorov, ktorí takýto dôkaz požadujú.<br>
+            <input type="checkbox" name="agree-photo" required> Potvrdzujem
+        </label>
+    </fieldset>
+
+    <!-- TODO: Price calculator -->
+
+    <input type="submit" value="Odoslať">
+
+</form>
+{% endblock %}

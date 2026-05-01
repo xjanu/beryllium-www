@@ -1,0 +1,96 @@
+<fieldset class="nth-child" name="children[{{child_number}}]">
+    <legend>{{child_number + 1}}. dieťa</legend>
+    <label>
+        Meno<br>
+        <input type="text" name="children[{{child_number}}][forename]"
+            required minlength="2" maxlength="100"/>
+    </label><br>
+    <label>
+        Priezvisko<br>
+        <input type="text" name="children[{{child_number}}][surname]"
+            required minlength="2" maxlength="100"/>
+    </label><br>
+    <fieldset class="radio">
+        <legend>Pohlavie</legend>
+        <label>
+            <input type="radio" name="children[{{child_number}}][gender]" value="female" /> Dievča
+        </label>
+        <label>
+            <input type="radio" name="children[{{child_number}}][gender]" value="male" required/> Chlapec
+        </label>
+    </fieldset>
+    <label>
+        Dátum narodenia<br>
+        <input type="date" name="children[{{child_number}}][date-of-birth]"
+            required min="2013-01-01" max="2019-12-31" />
+    </label><br>
+    <label>
+        Rodné číslo<br>
+        <input type="text" name="children[{{child_number}}][rodne-cislo]"
+            required pattern="\d{6}/?\d{4}"/>
+    </label><br>
+    <fieldset>
+        <legend>Trvalé bydlisko</legend>
+        <label>
+            Mesto a mestská časť<br>
+            <input type="text" name="children[{{child_number}}][municipality]"
+                required minlength="2" maxlength="50"/>
+        </label><br>
+        <label>
+            Ulica a čislo domu<br>
+            <input type="text" name="children[{{child_number}}][street-with-number]"
+                required/>
+        </label><br>
+        <label>
+            <abbr title="Poštové smerovacie číslo">PSČ</abbr><br>
+            <input type="text" name="children[{{child_number}}][municipality]"
+                required pattern="\d( ?\d){2,9}"/>
+        </label><br>
+    </fieldset>
+    <fieldset class="checkbox">
+        <legend>Na ktoré dni dieťa prihlasujete?</legend>
+        <p>
+            Cena sa riadi <a href="/#price">platným cenníkom</a>.
+        </p>
+        <label>
+            <input type="checkbox" name="children[{{child_number}}][days][all]" checked /> Všetky dni
+        </label><br>
+        <label>
+            <input type="checkbox" name="children[{{child_number}}][days][monday]" /> Pondelok 10. 08. 2026
+        </label><br>
+        <label>
+            <input type="checkbox" name="children[{{child_number}}][days][tuesday]" /> Utorok 11. 08. 2026
+        </label><br>
+        <label>
+            <input type="checkbox" name="children[{{child_number}}][days][wednesday]" /> Streda 12. 08. 2026
+        </label><br>
+        <label>
+            <input type="checkbox" name="children[{{child_number}}][days][thursday]" /> Štvrtok 13. 08. 2026
+        </label><br>
+        <label>
+            <input type="checkbox" name="children[{{child_number}}][days][friday]" /> Piatok 14. 08. 2026
+        </label><br>
+    </fieldset>
+    <fieldset>
+        <legend>Ďalšie dôležité informácie</legend>
+        <p>
+            V tejto sekcii nám môžete poskytnúť ďalšie informácie, ktoré
+            nám pomôžu zabezpečiť, aby sa Vaše deti u nás cítili
+            komfortne. Dajte nám vedieť hlavne v prípade, že dieťa trpí
+            <strong>potravinovou alergiou</strong>, má
+            <strong>zdravotné obmedzenia</strong> pri športových
+            aktivitách, prípadne vyžaduje špeciálne zaobchádzanie
+            a ďalšie dôležité informácie.
+        </p>
+        <textarea name="children[{{child_number}}][more-info]" rows="5"></textarea>
+    </fieldset>
+</fieldset>
+
+{% set child_number = child_number + 1 %}
+{% if child_number < max_children %}
+{% include "includes/register-child.njk" %}
+{% else %}
+<button type="button" name="add-child" value="{{child_number}}" hidden>Pridať dieťa</button>
+<button type="button" name="del-child" value="{{child_number}}" hidden>Odobrať dieťa</button>
+<p id="max-children">Maximálny počet detí na jeden formulár je {{max_children}}.</p>
+{% endif %}
