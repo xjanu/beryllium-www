@@ -59,7 +59,8 @@ server.get("/pg", async (req, reply) => {
     return users;
 })
 
-server.listen({ port: 8080 }, (err, address) => {
+server.listen({ port: Number(process.env.BACKEND_PORT),
+                host: "0.0.0.0" }, (err, address) => {
     if (err) {
         console.error(err)
         process.exit(1)
