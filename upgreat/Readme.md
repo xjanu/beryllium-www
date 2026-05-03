@@ -44,8 +44,27 @@ UpGREAT! camp website
 ## Technologies
 - typescript
 - fastify backend
-- @fastify/view + nunjucks for templates
+  - @fastify/view + nunjucks for templates
+  - @fastify/formbody for html form decoding
 - postgres + drizzle ORM/migrations
 
-## Update, Build, Develop, Deploy
-TODO
+## Develop
+
+- Start backend server
+```
+cp env.example .env
+vim .env
+npm i
+npm run dev
+```
+
+- Compile frontend on change
+```
+cd client
+npm i
+npm run dev
+
+- Run the database server
+```
+docker compose up upgreat-db
+```
