@@ -37,7 +37,6 @@ for (const path of ['about', 'contact', 'register']) {
 
 server.register(static_route)
 
-
 // dummy example endpoints:
 
 server.get('/ping', async (request, reply) => {
