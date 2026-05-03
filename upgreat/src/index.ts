@@ -4,6 +4,7 @@ import fastifyView from '@fastify/view'
 import Nunjucks from 'nunjucks'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import fastifyFormbody from '@fastify/formbody'
 
 import static_route from './static.ts'
 import { usersTable } from './db/schema.ts'
@@ -25,6 +26,8 @@ server.register(fastifyView, {
     root: "templates/",
 })
 
+server.register(fastifyFormbody)
+
 server.get("/", async (req, reply) => {
     return reply.viewAsync("index.njk", { name: "User" });
 })
@@ -34,6 +37,11 @@ for (const path of ['about', 'contact', 'register']) {
         return reply.viewAsync(path + '.njk')
     })
 }
+
+server.post("/register", async (req, reply) => {
+    console.log(req.body)
+    return { hello: "world" }
+})
 
 server.register(static_route)
 
