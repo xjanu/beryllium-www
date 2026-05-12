@@ -44,7 +44,7 @@
             <label for="guardian_tel">Telefónne číslo</label><br>
             <input id="guardian_tel" name="guardian_tel"
                    type="tel" autocomplete="tel"
-                   required pattern="\+?\d( ?\d){9,19}"
+                   required pattern="^\+?\d( ?\d){9,19}$"
                    value="{{ value.guardian_tel }}"/><br>
             <div class="error">{{ error.guardian_tel }}</div>
         </div>
@@ -141,7 +141,16 @@
 
     <!-- TODO: Price calculator -->
 
-    <div class="error">{{ error.form | safe }}</div>
+    <div class="error">
+        {%- if error.messages %}
+            <ul>
+                {% for message in error.messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            <p>V prípade nejasností kontaktujte správcu: <a href="mailto:admin@martinjanu.eu">admin@martinjanu.eu</a>.</p>
+        {% endif -%}
+    </div>
 
     <input type="submit" value="Odoslať">
 

@@ -4,30 +4,24 @@ import qs from 'qs'
 import localize from 'ajv-i18n'
 
 class FormError {
-    error: any ={}
+    error: any = {}
+    messages: string[] = []
 
     constructor(schema_errors: Array<object>) {
         for (const schema_error of schema_errors) {
             if (!('instancePath' in schema_error) || typeof(schema_error.instancePath) !== 'string') {
-                this.error.form='Chyba validácie (schema_error.instancePath). Kontaktujte správcu: <a href="mailto:admin@martinjanu.eu">admin@martinjanu.eu</a>'
-                continue
-            }
-            if (!('keyword' in schema_error) || typeof(schema_error.keyword) !== 'string') {
-                this.error.form='Chyba validácie (schema_error.keyword). Kontaktujte správcu: <a href="mailto:admin@martinjanu.eu">admin@martinjanu.eu</a>'
-                continue
-            }
-            if (!('params' in schema_error)) {
-                this.error.form='Chyba validácie (schema_error.params). Kontaktujte správcu: <a href="mailto:admin@martinjanu.eu">admin@martinjanu.eu</a>'
+                this.messages.push('Chyba validácie (schema_error.instancePath).')
                 continue
             }
             if (!('message' in schema_error) || typeof(schema_error.message) !== 'string') {
-                this.error.form='Chyba validácie (schema_error.message). Kontaktujte správcu: <a href="mailto:admin@martinjanu.eu">admin@martinjanu.eu</a>'
+                this.messages.push('Chyba validácie (schema_error.message).')
                 continue
             }
 
+            this.messages.push(`${schema_error.instancePath}: ${schema_error.message}`)
+
             const instance_path = schema_error.instancePath.replace(/^\//, "").split('/')
             if (instance_path.length <= 0) {
-                this.error.form="Chyba validácie: " + schema_error.message
                 continue
             }
 
@@ -38,6 +32,7 @@ class FormError {
             }
             prev[instance_path[instance_path.length - 1]] = schema_error.message
         }
+        this.error['messages'] = this.messages
     }
 }
 
@@ -47,8 +42,16 @@ const register_schema = {
         properties: {
             "guardian_name": {
                 type: "string",
-                minLength: 20,
+                minLength: 2,
                 maxLength: 100
+            },
+            "guardian_email": {
+                type: "string",
+                pattern: "^..*@..*\\...*$"
+            },
+            "guardian_tel": {
+                type: "string",
+                pattern: "^\\+?\\d( ?\\d){9,19}$"
             },
             "children": {
                 type: "array",
@@ -58,15 +61,77 @@ const register_schema = {
                     properties: {
                         "forename": {
                             type: "string",
-                            minLength: 20,
+                            minLength: 2,
                             maxLength: 100
+                        },
+                        "surname": {
+                            type: "string",
+                            minLength: 2,
+                            maxLength: 100
+                        },
+                        "gender": {
+                            enum: ["female", "male"]
+                        },
+                        "date_of_birth": {
+                            type: "string",
+                            pattern: "^\\d\\d\\d\\d-\\d\\d-\\d\\d$"
+                        },
+                        "municipality": {
+                            type: "string",
+                            minLength: 2,
+                            maxLength: 50
+                        },
+                        "street_with_number": {
+                            type: "string",
+                            maxLength: 50
+                        },
+                        "postal_code": {
+                            type: "string",
+                            pattern: "^\\d( ?\\d){2,9}$"
+                        },
+                        "days": {
+                            type: "object",
+                            properties: {
+                                "all": {
+                                    const: "on"
+                                },
+                                "monday": {
+                                    const: "on"
+                                },
+                                "tuesday": {
+                                    const: "on"
+                                },
+                                "wednesday": {
+                                    const: "on"
+                                },
+                                "thursday": {
+                                    const: "on"
+                                },
+                                "friday": {
+                                    const: "on"
+                                }
+                            }
+                        },
+                        "more_info": {
+                            type: "string",
+                            maxLength: 2000
                         }
                     },
-                    required: ["forename"]
+                    required: ["forename", "surname", "gender", "date_of_birth", "municipality", "street_with_number", "postal_code", "days"],
+                    "additionalProperties": false
                 }
-            }
+            },
+            "agree_correct": {
+                const: "on"
+            },
+            "agree_gdpr": {
+                const: "on"
+            },
+            "agree_photo": {
+                const: "on"
+            },
         },
-        required: ["guardian_name"],
+        required: ["guardian_name", "guardian_email", "guardian_tel", "children", "agree_correct", "agree_gdpr", "agree_photo"],
         "additionalProperties": false
     }
 }

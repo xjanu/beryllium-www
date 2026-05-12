@@ -12,7 +12,7 @@ import { usersTable } from './db/schema.ts'
 const server = fastify({
     ajv: {
         customOptions: {
-            removeAdditional: true,
+            removeAdditional: false,
             allErrors: true,
             messages: false
         }
