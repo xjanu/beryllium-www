@@ -13,6 +13,10 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
     return reply.sendFile('style.css')
   })
 
+  fastify.get('/favicon.png', async (req, reply) => {
+    return reply.sendFile('favicon.png')
+  })
+
 
   // Serve also client javascript
   fastify.register(FastifyStatic, {

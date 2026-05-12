@@ -312,7 +312,8 @@ header {
     font-size: 110%;
 }
 
-header>#logo {
+header>#logo,
+header>#logo img{
     height: var(--header-line-height);
 }
 
