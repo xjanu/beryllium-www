@@ -65,7 +65,8 @@ table {
     --text-color-strong: #000000;
     --background-color: #ffffff;
     --error-color-text: #C00000;
-    --error-color-border: #FF0000;
+    --error-color-border: #C00000;
+    --error-color-background: #FFc0c0;
     --warn-color-border: #F6AF65;
     --warn-color-background: #f7d1a9;
 
@@ -157,6 +158,15 @@ strong {
     border: 0.3rem solid var(--warn-color-border);
     background-color: var(--warn-color-background);
     color: var(--text-color-strong);
+    font-weight: 500;
+}
+
+.error {
+    margin: 0.3rem auto;
+    padding: 0.2rem;
+    border: 0.1rem dotted var(--error-color-border);
+    background-color: var(--error-color-background);
+    color: var(--error-color-text);
     font-weight: 500;
 }
 
@@ -282,9 +292,14 @@ textarea:user-invalid {
     border: 2px solid var(--error-color-border);
 }
 
-label:has(>input[required])::after {
-    content: "*";
+.required::after,
+div:has(>input[required])>label::after {
+    content: " *";
     color: var(--error-color-text)
+}
+
+:has(>input) .error:empty {
+    display: none;
 }
 
 form:has(label>input[required])::before {

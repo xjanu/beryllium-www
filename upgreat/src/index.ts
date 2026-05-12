@@ -5,6 +5,7 @@ import Nunjucks from 'nunjucks'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import fastifyFormbody from '@fastify/formbody'
+import qs from 'qs'
 
 import static_route from './static.ts'
 import { usersTable } from './db/schema.ts'
@@ -26,7 +27,7 @@ server.register(fastifyView, {
     root: "templates/",
 })
 
-server.register(fastifyFormbody)
+server.register(fastifyFormbody, {parser: qs.parse})
 
 server.get("/", async (req, reply) => {
     return reply.viewAsync("index.njk", { name: "User" });
@@ -34,13 +35,28 @@ server.get("/", async (req, reply) => {
 
 for (const path of ['about', 'contact', 'register']) {
     server.get('/' + path, async (req, reply) => {
-        return reply.viewAsync(path + '.njk')
+        return reply.view(path + '.njk')
     })
 }
 
 server.post("/register", async (req, reply) => {
     console.log(req.body)
-    return { hello: "world" }
+
+    return reply.view("register.njk", {value: req.body, error: {
+        guardian_name: "Chyba mena",
+        children: [
+            {
+                forename: "Chyba dieťaťa 0"
+            },
+            {
+                forename: "Chyba dieťaťa 1"
+            }
+        ]
+    }});
+
+    reply.code(303) // See Other
+         .header('Location', './success')
+         .send()
 })
 
 server.register(static_route)
