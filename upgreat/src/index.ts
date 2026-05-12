@@ -4,13 +4,20 @@ import fastifyView from '@fastify/view'
 import Nunjucks from 'nunjucks'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
-import fastifyFormbody from '@fastify/formbody'
-import qs from 'qs'
 
 import static_route from './static.ts'
+import register_route from './register.ts'
 import { usersTable } from './db/schema.ts'
 
-const server = fastify()
+const server = fastify({
+    ajv: {
+        customOptions: {
+            removeAdditional: true,
+            allErrors: true,
+            messages: false
+        }
+    }
+})
 
 const db = drizzle(process.env.DATABASE_URL!);
 if (process.env.NODE_ENV === 'production') {
@@ -27,39 +34,18 @@ server.register(fastifyView, {
     root: "templates/",
 })
 
-server.register(fastifyFormbody, {parser: qs.parse})
-
 server.get("/", async (req, reply) => {
     return reply.viewAsync("index.njk", { name: "User" });
 })
 
-for (const path of ['about', 'contact', 'register']) {
+for (const path of ['about', 'contact']) {
     server.get('/' + path, async (req, reply) => {
         return reply.view(path + '.njk')
     })
 }
 
-server.post("/register", async (req, reply) => {
-    console.log(req.body)
-
-    return reply.view("register.njk", {value: req.body, error: {
-        guardian_name: "Chyba mena",
-        children: [
-            {
-                forename: "Chyba dieťaťa 0"
-            },
-            {
-                forename: "Chyba dieťaťa 1"
-            }
-        ]
-    }});
-
-    reply.code(303) // See Other
-         .header('Location', './success')
-         .send()
-})
-
 server.register(static_route)
+server.register(register_route)
 
 // dummy example endpoints:
 
