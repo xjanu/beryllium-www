@@ -7,7 +7,6 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 
 import static_route from './static.ts'
 import register_route from './register.ts'
-import { usersTable } from './db/schema.ts'
 
 const server = fastify({
     ajv: {
@@ -46,27 +45,6 @@ for (const path of ['about', 'contact']) {
 
 server.register(static_route)
 server.register(register_route)
-
-// dummy example endpoints:
-
-server.get('/ping', async (request, reply) => {
-    return 'ping pong\n'
-})
-
-server.get("/pg", async (req, reply) => {
-    const user: typeof usersTable.$inferInsert = {
-        name: 'John',
-        age: 30,
-        email: 'john@example.com',
-    };
-
-    await db.insert(usersTable).values(user);
-    console.log('New user created!')
-
-    const users = await db.select().from(usersTable);
-
-    return users;
-})
 
 server.listen({ port: Number(process.env.BACKEND_PORT),
                 host: "0.0.0.0" }, (err, address) => {

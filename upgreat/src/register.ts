@@ -47,6 +47,7 @@ const register_schema = {
             },
             "guardian_email": {
                 type: "string",
+                maxLength: 100,
                 pattern: "^..*@..*\\...*$"
             },
             "guardian_tel": {
@@ -152,9 +153,23 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
         if (req.validationError) {
             (localize as any).sk(req.validationError.validation)
             console.log(req.validationError.validation)
-            return reply.view("register.njk", {
+            return reply.code(400)
+                        .view("register.njk", {
                 value: req.body, error: new FormError(req.validationError.validation).error})
         }
+
+        /*const user: typeof usersTable.$inferInsert = {
+            name: 'John',
+            age: 30,
+            email: 'john@example.com',
+        };
+
+        await db.insert(usersTable).values(user);
+        console.log('New user created!')
+
+        const users = await db.select().from(usersTable);
+
+        return users;*/
 
         reply.code(303) // See Other
             .header('Location', './register-success')
