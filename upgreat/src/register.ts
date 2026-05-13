@@ -2,6 +2,20 @@ import { FastifyInstance, FastifyRequest } from "fastify"
 import fastifyFormbody from '@fastify/formbody'
 import qs from 'qs'
 import localize from 'ajv-i18n'
+import { eq } from 'drizzle-orm'
+
+import { guardianTable, childTable, genderEnum } from "./db/schema.ts"
+
+
+// TODO: register as fastify plugin
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { migrate } from 'drizzle-orm/node-postgres/migrator'
+const db = drizzle(process.env.DATABASE_URL!);
+if (process.env.NODE_ENV === 'production') {
+    await migrate(db, {
+        migrationsFolder: "./drizzle-migrations",
+    });
+}
 
 class FormError {
     error: any = {}
@@ -158,22 +172,47 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
                 value: req.body, error: new FormError(req.validationError.validation).error})
         }
 
-        /*const user: typeof usersTable.$inferInsert = {
-            name: 'John',
-            age: 30,
-            email: 'john@example.com',
-        };
+        // TODO: use typebox for type inference
+        const guardian: typeof guardianTable.$inferInsert = {
+            name: req.body.guardian_name,
+            email: req.body.guardian_email,
+            tel: req.body.guardian_tel
+        }
+        const inserted_guardian = await db.insert(guardianTable).values(guardian).returning();
 
-        await db.insert(usersTable).values(user);
-        console.log('New user created!')
-
-        const users = await db.select().from(usersTable);
-
-        return users;*/
+        for (const req_child of req.body.children) {
+            const child: typeof childTable.$inferInsert = {
+                guardian_id: inserted_guardian[0].id,
+                forename: req_child.forename,
+                surname: req_child.surname,
+                gender: req_child.gender,
+                date_of_birth: req_child.date_of_birth,
+                municipality: req_child.municipality,
+                street_with_number: req_child.street_with_number,
+                postal_code: req_child.postal_code,
+                days_all: req_child.days.all === 'on',
+                days_mon: req_child.days.monday === 'on',
+                days_tue: req_child.days.tuesday === 'on',
+                days_wed: req_child.days.wednesday === 'on',
+                days_thu: req_child.days.thursday === 'on',
+                days_fri: req_child.days.friday === 'on',
+                more_info: req_child.more_info,
+            }
+            await db.insert(childTable).values(child);
+        }
 
         reply.code(303) // See Other
             .header('Location', './register-success')
             .send()
+    })
+
+    fastify.get('/register-success', async (req, reply) => {
+        const guardians: any[] = await db.select().from(guardianTable);
+        for (let guardian of guardians) {
+            const children = await db.select().from(childTable).where(eq(childTable.guardian_id, guardian.id))
+            guardian["children"] = children
+        }
+        return guardians;
     })
 }
 
