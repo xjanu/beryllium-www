@@ -27,5 +27,5 @@ jobs:
           git pull --force
           docker compose --profile prod build
           docker compose -p beryllium-www down --remove-orphans
-          docker compose --profile prod up --detach
+          docker compose --profile prod up --build --detach
           EOF

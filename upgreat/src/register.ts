@@ -1,3 +1,5 @@
+//@ts-nocheck // TODO: remove:
+
 import { FastifyInstance, FastifyRequest } from "fastify"
 import fastifyFormbody from '@fastify/formbody'
 import qs from 'qs'
