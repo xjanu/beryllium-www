@@ -207,12 +207,7 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
     })
 
     fastify.get('/register-success', async (req, reply) => {
-        const guardians: any[] = await db.select().from(guardianTable);
-        for (let guardian of guardians) {
-            const children = await db.select().from(childTable).where(eq(childTable.guardian_id, guardian.id))
-            guardian["children"] = children
-        }
-        return guardians;
+        return reply.view('register-success.njk')
     })
 }
 
