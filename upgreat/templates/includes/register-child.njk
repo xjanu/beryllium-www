@@ -1,70 +1,107 @@
 <fieldset class="nth-child" name="children[{{child_number}}]">
     <legend>{{child_number + 1}}. dieťa</legend>
-    <label>
-        Meno<br>
-        <input type="text" name="children[{{child_number}}][forename]"
-            required minlength="2" maxlength="100"/>
-    </label><br>
-    <label>
-        Priezvisko<br>
-        <input type="text" name="children[{{child_number}}][surname]"
-            required minlength="2" maxlength="100"/>
-    </label><br>
+    <div>
+        <label for="children[{{child_number}}][forename]">Meno</label><br>
+        <input id="children[{{child_number}}][forename]" name="children[{{child_number}}][forename]"
+               type="text"
+               required minlength="2" maxlength="100"
+               value="{{ value.children[child_number].forename }}"/><br>
+        <div class="error">{{ error.children[child_number].forename }}</div>
+    </div>
+    <div>
+        <label for="children[{{child_number}}][surname]">Priezvisko</label><br>
+        <input id="children[{{child_number}}][surname]" name="children[{{child_number}}][surname]"
+               type="text"
+               required minlength="2" maxlength="100"
+               value="{{ value.children[child_number].surname }}"/><br>
+        <div class="error">{{ error.children[child_number].surname }}</div>
+    </div>
     <fieldset class="radio">
-        <legend>Pohlavie</legend>
+        <legend class="required">Pohlavie</legend>
         <label>
-            <input type="radio" name="children[{{child_number}}][gender]" value="female" /> Dievča
+            <input type="radio" name="children[{{child_number}}][gender]" value="female"
+                   required
+                   {% if value.children[child_number].gender == "female" %}checked{% endif %}
+            /> Dievča
         </label>
         <label>
-            <input type="radio" name="children[{{child_number}}][gender]" value="male" required/> Chlapec
+            <input type="radio" name="children[{{child_number}}][gender]" value="male"
+                   required
+                   {% if value.children[child_number].gender == "male" %}checked{% endif %}
+            /> Chlapec
         </label>
     </fieldset>
-    <label>
-        Dátum narodenia<br>
-        <input type="date" name="children[{{child_number}}][date-of-birth]"
-            required min="2013-01-01" max="2019-12-31" />
-    </label><br>
+    <div>
+        <label for="children[{{child_number}}][date_of_birth]">Dátum narodenia</label><br>
+        <input id="children[{{child_number}}][date_of_birth]" name="children[{{child_number}}][date_of_birth]"
+               type="date"
+               required min="2010-01-01" max="2023-12-31"
+               value="{{ value.children[child_number].date_of_birth }}"/><br>
+        <div class="error">{{ error.children[child_number].date_of_birth }}</div>
+    </div>
     <fieldset>
         <legend>Trvalé bydlisko</legend>
-        <label>
-            Mesto a mestská časť<br>
-            <input type="text" name="children[{{child_number}}][municipality]"
-                required minlength="2" maxlength="50"/>
-        </label><br>
-        <label>
-            Ulica a čislo domu<br>
-            <input type="text" name="children[{{child_number}}][street-with-number]"
-                required/>
-        </label><br>
-        <label>
-            <abbr title="Poštové smerovacie číslo">PSČ</abbr><br>
-            <input type="text" name="children[{{child_number}}][municipality]"
-                required pattern="\d( ?\d){2,9}"/>
-        </label><br>
+        <div>
+            <label for="children[{{child_number}}][municipality]">Mesto a mestská časť</label><br>
+            <input id="children[{{child_number}}][municipality]" name="children[{{child_number}}][municipality]"
+                type="text"
+                required minlength="2" maxlength="50"
+                value="{{ value.children[child_number].municipality }}"/><br>
+            <div class="error">{{ error.children[child_number].municipality }}</div>
+        </div>
+        <div>
+            <label for="children[{{child_number}}][street_with_number]">Ulica a čislo domu</label><br>
+            <input id="children[{{child_number}}][street_with_number]" name="children[{{child_number}}][street_with_number]"
+                type="text"
+                required maxlength="50"
+                value="{{ value.children[child_number].street_with_number }}"/><br>
+            <div class="error">{{ error.children[child_number].street_with_number }}</div>
+        </div>
+        <div>
+            <label for="children[{{child_number}}][postal_code]"><abbr title="Poštové smerovacie číslo">PSČ</abbr></label><br>
+            <input id="children[{{child_number}}][postal_code]" name="children[{{child_number}}][postal_code]"
+                type="text"
+                required pattern="^\d( ?\d){2,9}$"
+                value="{{ value.children[child_number].postal_code }}"/><br>
+            <div class="error">{{ error.children[child_number].postal_code }}</div>
+        </div>
     </fieldset>
     <fieldset class="checkbox">
-        <legend>Na ktoré dni dieťa prihlasujete?</legend>
+        <legend class="required">Na ktoré dni dieťa prihlasujete?</legend>
         <p>
             Cena sa riadi <a href="/#price">platným cenníkom</a>.
         </p>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][all]" checked /> Všetky dni
+            <input type="checkbox" name="children[{{child_number}}][days][all]"
+                   {% if value.children[child_number].days.all %}checked{% endif %}
+            /> Všetky dni
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][monday]" /> Pondelok 10. 08. 2026
+            <input type="checkbox" name="children[{{child_number}}][days][monday]"
+                   {% if value.children[child_number].days.monday %}checked{% endif %}
+            /> Pondelok 10. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][tuesday]" /> Utorok 11. 08. 2026
+            <input type="checkbox" name="children[{{child_number}}][days][tuesday]"
+                   {% if value.children[child_number].days.tuesday %}checked{% endif %}
+            /> Utorok 11. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][wednesday]" /> Streda 12. 08. 2026
+            <input type="checkbox" name="children[{{child_number}}][days][wednesday]"
+                   {% if value.children[child_number].days.wednesday %}checked{% endif %}
+            /> Streda 12. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][thursday]" /> Štvrtok 13. 08. 2026
+            <input type="checkbox" name="children[{{child_number}}][days][thursday]"
+                   {% if value.children[child_number].days.thursday %}checked{% endif %}
+            /> Štvrtok 13. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][friday]" /> Piatok 14. 08. 2026
+            <input type="checkbox" name="children[{{child_number}}][days][friday]"
+                   {% if value.children[child_number].days.friday %}checked{% endif %}
+            /> Piatok 14. 08. 2026
         </label><br>
+        <div class="error">{{ error.children[child_number].days }}</div>
     </fieldset>
     <fieldset>
         <legend>Ďalšie dôležité informácie</legend>
@@ -77,7 +114,10 @@
             aktivitách, prípadne vyžaduje špeciálne zaobchádzanie
             a ďalšie dôležité informácie.
         </p>
-        <textarea name="children[{{child_number}}][more-info]" rows="5"></textarea>
+        <textarea name="children[{{child_number}}][more_info]" rows="5" maxlength="2000">
+            {{- value.children[child_number].more_info -}}
+        </textarea>
+        <div class="error">{{ error.children[child_number].more_info }}</div>
     </fieldset>
 </fieldset>
 

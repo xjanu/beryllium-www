@@ -1,5 +1,4 @@
 {% extends "layouts/main.njk" %}
-
 {% set page_title = "Registrácia" %}
 
 {% block maincontent %}
@@ -25,21 +24,30 @@
             Vás vďaka nim môžeme v prípade potreby  kontaktovať v priebehu
             tábora.
         </p>
-        <label>
-            Meno a priezvisko<br>
-            <input type="text" name="guardian-name" autocomplete="name"
-                required minlength="2" maxlength="100"/>
-        </label><br>
-        <label>
-            Email<br>
-            <input type="email" name="guardian-email" autocomplete="email"
-                required/>
-        </label><br>
-        <label>
-            Telefónne číslo<br>
-            <input type="tel" name="guardian-phone" autocomplete="tel"
-                required pattern="\+?\d( ?\d){9,19}"/>
-        </label><br>
+        <div>
+            <label for="guardian_name">Meno a priezvisko</label><br>
+            <input id="guardian_name" name="guardian_name"
+                   type="text" autocomplete="name"
+                   required minlength="2" maxlength="100"
+                   value="{{ value.guardian_name }}"/><br>
+            <div class="error">{{ error.guardian_name }}</div>
+        </div>
+        <div>
+            <label for="guardian_email">Email</label><br>
+            <input id="guardian_email" name="guardian_email"
+                   type="email" autocomplete="email"
+                   required
+                   value="{{ value.guardian_email }}"/><br>
+            <div class="error">{{ error.guardian_email }}</div>
+        </div>
+        <div>
+            <label for="guardian_tel">Telefónne číslo</label><br>
+            <input id="guardian_tel" name="guardian_tel"
+                   type="tel" autocomplete="tel"
+                   required pattern="^\+?\d( ?\d){9,19}$"
+                   value="{{ value.guardian_tel }}"/><br>
+            <div class="error">{{ error.guardian_tel }}</div>
+        </div>
     </fieldset>
 
     <fieldset name="children">
@@ -54,7 +62,7 @@
             preberáme za deti zodpovednosť.
         </p>
         {% set child_number = 0 %}
-        {% set max_children = 5 %}
+        {% set max_children = 10 %}
         {% include "includes/register-child.njk" %}
     </fieldset>
 
@@ -82,35 +90,70 @@
         <p>
             Tento súhlas udeľujem pre správcu:<br>
             <strong>
-                Občianske združenie ..................................<br>
-                IČO: ..................................<br>
-                Sídlo: Bočná 100, 821 04 Bratislava - Ružinov
+                Alexandra Kušnyérová<br>
+                +421 903 665 752<br>
+                upgreat26@gmail.com
             </strong>
         </p>
         <hr>
 
-        <label>
-            Potvrdzujem správnosť všetkých údajov v tomto formulári, súhlasím
-            s účasťou dieťaťa/detí na tábore a potvrdzujem, že zákonný zástupca
-            dieťaťa/detí s jeho/ich účasťou na tábore súhlasí.<br>
-            <input type="checkbox" name="agree-correct" required> Potvrdzujem
-        </label>
-        <label>
-            Súhlasím so spracovaním osobných údajov na účely organizácie tábora
-            a dokladovania výdavkov spojených s táborom pre sponzorov, ktorí
-            takéto doklady vyžadujú.<br>
-            <input type="checkbox" name="agree-gdpr" required> Potvrdzujem
-        </label>
-        <label>
-            Súhlasím s fotodokumentáciou tábora. Som si vedomý, že
-            účastník tábora bude na týchto fotografiách viditeľný a že
-            fotografie budú využité na účely propagácie tábora a dokladovania
-            jeho priebehu pre sponzorov, ktorí takýto dôkaz požadujú.<br>
-            <input type="checkbox" name="agree-photo" required> Potvrdzujem
-        </label>
+        <div>
+            <p>
+                Potvrdzujem správnosť všetkých údajov v tomto formulári, súhlasím
+                s účasťou dieťaťa/detí na tábore a potvrdzujem, že zákonný zástupca
+                dieťaťa/detí s jeho/ich účasťou na tábore súhlasí.
+            </p>
+            <input id="agree_correct" name="agree_correct"
+                   type="checkbox"
+                   required
+                   {% if value.agree_correct %}checked{% endif %}
+            /> <label for="agree_correct">Potvrdzujem</label><br>
+            <div class="error">{{ error.agree_correct }}</div>
+        </div>
+        <div>
+            <p>
+                Súhlasím so spracovaním osobných údajov na účely organizácie tábora
+                a dokladovania výdavkov spojených s táborom pre sponzorov, ktorí
+                takéto doklady vyžadujú.
+            </p>
+            <input id="agree_gdpr" name="agree_gdpr"
+                   type="checkbox"
+                   required
+                   {% if value.agree_gdpr %}checked{% endif %}
+            /> <label for="agree_gdpr">Potvrdzujem</label><br>
+            <div class="error">{{ error.agree_gdpr }}</div>
+        </div>
+        <div>
+            <p>
+                Súhlasím s fotodokumentáciou tábora. Som si vedomý, že
+                účastník tábora bude na týchto fotografiách viditeľný a že
+                fotografie budú využité na účely propagácie tábora a dokladovania
+                jeho priebehu pre sponzorov, ktorí takýto dôkaz požadujú.
+            </p>
+            <input id="agree_photo" name="agree_photo"
+                   type="checkbox"
+                   required
+                   {% if value.agree_photo %}checked{% endif %}
+            /> <label for="agree_photo">Potvrdzujem</label><br>
+            <div class="error">{{ error.agree_photo }}</div>
+        </div>
     </fieldset>
 
     <!-- TODO: Price calculator -->
+
+    <div class="error">
+        {%- if error.messages %}
+            <ul>
+                {% for message in error.messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            <p>V prípade nejasností kontaktujte správcu: <a href="mailto:admin@martinjanu.eu">admin@martinjanu.eu</a>.</p>
+        {% endif -%}
+    </div>
+
+    <p>Ďalšie informácie Vám pošleme e-mailom na hore vyplnenú adresu.</p>
+    <p>Informácie k platbe pošleme koncom Júna.</p>
 
     <input type="submit" value="Odoslať">
 

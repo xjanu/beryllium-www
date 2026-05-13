@@ -2,21 +2,19 @@ import 'dotenv/config'
 import fastify from 'fastify'
 import fastifyView from '@fastify/view'
 import Nunjucks from 'nunjucks'
-import { drizzle } from 'drizzle-orm/node-postgres'
-import { migrate } from 'drizzle-orm/node-postgres/migrator'
-import fastifyFormbody from '@fastify/formbody'
 
 import static_route from './static.ts'
-import { usersTable } from './db/schema.ts'
+import register_route from './register.ts'
 
-const server = fastify()
-
-const db = drizzle(process.env.DATABASE_URL!);
-if (process.env.NODE_ENV === 'production') {
-    await migrate(db, {
-        migrationsFolder: "./drizzle-migrations",
-    });
-}
+const server = fastify({
+    ajv: {
+        customOptions: {
+            removeAdditional: false,
+            allErrors: true,
+            messages: false
+        }
+    }
+})
 
 server.register(fastifyView, {
     engine: {
@@ -26,45 +24,18 @@ server.register(fastifyView, {
     root: "templates/",
 })
 
-server.register(fastifyFormbody)
-
 server.get("/", async (req, reply) => {
     return reply.viewAsync("index.njk", { name: "User" });
 })
 
-for (const path of ['about', 'contact', 'register']) {
+for (const path of ['about', 'contact']) {
     server.get('/' + path, async (req, reply) => {
-        return reply.viewAsync(path + '.njk')
+        return reply.view(path + '.njk')
     })
 }
 
-server.post("/register", async (req, reply) => {
-    console.log(req.body)
-    return { hello: "world" }
-})
-
 server.register(static_route)
-
-// dummy example endpoints:
-
-server.get('/ping', async (request, reply) => {
-    return 'ping pong\n'
-})
-
-server.get("/pg", async (req, reply) => {
-    const user: typeof usersTable.$inferInsert = {
-        name: 'John',
-        age: 30,
-        email: 'john@example.com',
-    };
-
-    await db.insert(usersTable).values(user);
-    console.log('New user created!')
-
-    const users = await db.select().from(usersTable);
-
-    return users;
-})
+server.register(register_route)
 
 server.listen({ port: Number(process.env.BACKEND_PORT),
                 host: "0.0.0.0" }, (err, address) => {
