@@ -1,5 +1,7 @@
 import { HideChildrenHandler } from "./register-hide-children"
-import { RegisterDays } from "./register-days"
+import { DaysHandler } from "./register-days"
+import { RequiredHandler } from "./register-required"
 
 new HideChildrenHandler
-new RegisterDays
+new DaysHandler
+new RequiredHandler

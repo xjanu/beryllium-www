@@ -1,4 +1,4 @@
-export class RegisterDays {
+export class DaysHandler {
     constructor() {
         const children = document.getElementsByClassName("nth-child")
         for (const child of children) {

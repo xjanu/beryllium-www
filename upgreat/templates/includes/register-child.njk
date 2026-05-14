@@ -4,7 +4,7 @@
         <label for="children[{{child_number}}][forename]">Meno</label><br>
         <input id="children[{{child_number}}][forename]" name="children[{{child_number}}][forename]"
                type="text"
-               required minlength="2" maxlength="100"
+               {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %} minlength="2" maxlength="100"
                value="{{ value.children[child_number].forename }}"/><br>
         <div class="error">{{ error.children[child_number].forename }}</div>
     </div>
@@ -12,7 +12,7 @@
         <label for="children[{{child_number}}][surname]">Priezvisko</label><br>
         <input id="children[{{child_number}}][surname]" name="children[{{child_number}}][surname]"
                type="text"
-               required minlength="2" maxlength="100"
+               {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %} minlength="2" maxlength="100"
                value="{{ value.children[child_number].surname }}"/><br>
         <div class="error">{{ error.children[child_number].surname }}</div>
     </div>
@@ -20,13 +20,13 @@
         <legend class="required">Pohlavie</legend>
         <label>
             <input type="radio" name="children[{{child_number}}][gender]" value="female"
-                   required
+                   {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %}
                    {% if value.children[child_number].gender == "female" %}checked{% endif %}
             /> Dievča
         </label>
         <label>
             <input type="radio" name="children[{{child_number}}][gender]" value="male"
-                   required
+                   {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %}
                    {% if value.children[child_number].gender == "male" %}checked{% endif %}
             /> Chlapec
         </label>
@@ -35,7 +35,7 @@
         <label for="children[{{child_number}}][date_of_birth]">Dátum narodenia</label><br>
         <input id="children[{{child_number}}][date_of_birth]" name="children[{{child_number}}][date_of_birth]"
                type="date"
-               required min="2010-01-01" max="2023-12-31"
+               {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %} min="2010-01-01" max="2023-12-31"
                value="{{ value.children[child_number].date_of_birth }}"/><br>
         <div class="error">{{ error.children[child_number].date_of_birth }}</div>
     </div>
@@ -45,7 +45,7 @@
             <label for="children[{{child_number}}][municipality]">Mesto a mestská časť</label><br>
             <input id="children[{{child_number}}][municipality]" name="children[{{child_number}}][municipality]"
                 type="text"
-                required minlength="2" maxlength="50"
+                {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %} minlength="2" maxlength="50"
                 value="{{ value.children[child_number].municipality }}"/><br>
             <div class="error">{{ error.children[child_number].municipality }}</div>
         </div>
@@ -53,7 +53,7 @@
             <label for="children[{{child_number}}][street_with_number]">Ulica a čislo domu</label><br>
             <input id="children[{{child_number}}][street_with_number]" name="children[{{child_number}}][street_with_number]"
                 type="text"
-                required maxlength="50"
+                {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %} maxlength="50"
                 value="{{ value.children[child_number].street_with_number }}"/><br>
             <div class="error">{{ error.children[child_number].street_with_number }}</div>
         </div>
@@ -61,7 +61,7 @@
             <label for="children[{{child_number}}][postal_code]"><abbr title="Poštové smerovacie číslo">PSČ</abbr></label><br>
             <input id="children[{{child_number}}][postal_code]" name="children[{{child_number}}][postal_code]"
                 type="text"
-                required pattern="^\d( ?\d){2,9}$"
+                {% if child_number == 0 %}required{% else %}class="required-if-js"{% endif %} pattern="^\d( ?\d){2,9}$"
                 value="{{ value.children[child_number].postal_code }}"/><br>
             <div class="error">{{ error.children[child_number].postal_code }}</div>
         </div>
