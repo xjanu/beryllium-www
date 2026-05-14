@@ -5,6 +5,7 @@ import fastifyFormbody from '@fastify/formbody'
 import qs from 'qs'
 import localize from 'ajv-i18n'
 import { eq } from 'drizzle-orm'
+import { assert } from "node:console"
 
 import { guardianTable, childTable, genderEnum } from "./db/schema.ts"
 
@@ -74,68 +75,83 @@ const register_schema = {
                 type: "array",
                 minItems: 1,
                 items: {
-                    type: "object",
-                    properties: {
-                        "forename": {
-                            type: "string",
-                            minLength: 2,
-                            maxLength: 100
-                        },
-                        "surname": {
-                            type: "string",
-                            minLength: 2,
-                            maxLength: 100
-                        },
-                        "gender": {
-                            enum: ["female", "male"]
-                        },
-                        "date_of_birth": {
-                            type: "string",
-                            pattern: "^\\d\\d\\d\\d-\\d\\d-\\d\\d$"
-                        },
-                        "municipality": {
-                            type: "string",
-                            minLength: 2,
-                            maxLength: 50
-                        },
-                        "street_with_number": {
-                            type: "string",
-                            maxLength: 50
-                        },
-                        "postal_code": {
-                            type: "string",
-                            pattern: "^\\d( ?\\d){2,9}$"
-                        },
-                        "days": {
+                    oneOf: [
+                        {
                             type: "object",
                             properties: {
-                                "all": {
-                                    const: "on"
+                                "forename": {
+                                    type: "string",
+                                    minLength: 2,
+                                    maxLength: 100
                                 },
-                                "monday": {
-                                    const: "on"
+                                "surname": {
+                                    type: "string",
+                                    minLength: 2,
+                                    maxLength: 100
                                 },
-                                "tuesday": {
-                                    const: "on"
+                                "gender": {
+                                    enum: ["female", "male"]
                                 },
-                                "wednesday": {
-                                    const: "on"
+                                "date_of_birth": {
+                                    type: "string",
+                                    pattern: "^\\d\\d\\d\\d-\\d\\d-\\d\\d$"
                                 },
-                                "thursday": {
-                                    const: "on"
+                                "municipality": {
+                                    type: "string",
+                                    minLength: 2,
+                                    maxLength: 50
                                 },
-                                "friday": {
-                                    const: "on"
+                                "street_with_number": {
+                                    type: "string",
+                                    maxLength: 50
+                                },
+                                "postal_code": {
+                                    type: "string",
+                                    pattern: "^\\d( ?\\d){2,9}$"
+                                },
+                                "days": {
+                                    type: "object",
+                                    properties: {
+                                        "all": {
+                                            const: "on"
+                                        },
+                                        "monday": {
+                                            const: "on"
+                                        },
+                                        "tuesday": {
+                                            const: "on"
+                                        },
+                                        "wednesday": {
+                                            const: "on"
+                                        },
+                                        "thursday": {
+                                            const: "on"
+                                        },
+                                        "friday": {
+                                            const: "on"
+                                        }
+                                    }
+                                },
+                                "more_info": {
+                                    type: "string",
+                                    maxLength: 2000
                                 }
-                            }
+                            },
+                            required: ["forename", "surname", "gender", "date_of_birth", "municipality", "street_with_number", "postal_code", "days"],
+                            "additionalProperties": false
                         },
-                        "more_info": {
-                            type: "string",
-                            maxLength: 2000
+                        {
+                            const: {
+                                forename: "",
+                                surname: "",
+                                date_of_birth: "",
+                                municipality: "",
+                                street_with_number: "",
+                                postal_code: "",
+                                more_info: ""
+                            }
                         }
-                    },
-                    required: ["forename", "surname", "gender", "date_of_birth", "municipality", "street_with_number", "postal_code", "days"],
-                    "additionalProperties": false
+                    ]
                 }
             },
             "agree_correct": {
@@ -164,14 +180,46 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
     fastify.post( "/register", {
         attachValidation: true,
         schema: register_schema}, async (req, reply) => {
-        console.log(req.body)
-
+            
         if (req.validationError) {
             (localize as any).sk(req.validationError.validation)
-            console.log(req.validationError.validation)
             return reply.code(400)
                         .view("register.njk", {
                 value: req.body, error: new FormError(req.validationError.validation).error})
+        }
+
+        req.body.children = req.body.children.filter((child) => {
+            const a = JSON.stringify(Object.entries(child))
+            const b = JSON.stringify(Object.entries({
+                forename: "",
+                surname: "",
+                date_of_birth: "",
+                municipality: "",
+                street_with_number: "",
+                postal_code: "",
+                more_info: ""
+            }))
+            return a !== b
+        })
+
+        let error = {children: []}
+        for (const req_child_no in req.body.children) {
+            const req_child = req.body.children[req_child_no]
+            const days: string[] = []
+            for (const day in req_child.days) {
+                if (req_child.days[day] == "on") {
+                    days.push(day)
+                }
+            }
+            assert(days.length > 0, "days.length > 0")
+            if (days.includes('all') && days.length > 1) {
+                error["children"][req_child_no] = {days: "Nesmie byť zároveň zaškrtnutá položka 'Všetky dni' a ľubovoľný konkrétny deň."}
+            }
+        }
+        if (error.children.length > 0) {
+            return reply.code(400)
+                        .view("register.njk", {
+                value: req.body, error: error})
         }
 
         // TODO: use typebox for type inference
