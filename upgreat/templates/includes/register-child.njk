@@ -72,36 +72,37 @@
             Cena sa riadi <a href="/#price">platným cenníkom</a>.
         </p>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][all]"
+            <input type="checkbox" class="child-days-all" name="children[{{child_number}}][days][all]"
                    {% if value.children[child_number].days.all %}checked{% endif %}
             /> Všetky dni
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][monday]"
+            <input type="checkbox" class="child-days" name="children[{{child_number}}][days][monday]"
                    {% if value.children[child_number].days.monday %}checked{% endif %}
             /> Pondelok 10. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][tuesday]"
+            <input type="checkbox" class="child-days" name="children[{{child_number}}][days][tuesday]"
                    {% if value.children[child_number].days.tuesday %}checked{% endif %}
             /> Utorok 11. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][wednesday]"
+            <input type="checkbox" class="child-days" name="children[{{child_number}}][days][wednesday]"
                    {% if value.children[child_number].days.wednesday %}checked{% endif %}
             /> Streda 12. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][thursday]"
+            <input type="checkbox" class="child-days" name="children[{{child_number}}][days][thursday]"
                    {% if value.children[child_number].days.thursday %}checked{% endif %}
             /> Štvrtok 13. 08. 2026
         </label><br>
         <label>
-            <input type="checkbox" name="children[{{child_number}}][days][friday]"
+            <input type="checkbox" class="child-days" name="children[{{child_number}}][days][friday]"
                    {% if value.children[child_number].days.friday %}checked{% endif %}
             /> Piatok 14. 08. 2026
         </label><br>
         <div class="error">{{ error.children[child_number].days }}</div>
+        <div class="info child-days-info"></div>
     </fieldset>
     <fieldset>
         <legend>Ďalšie dôležité informácie</legend>

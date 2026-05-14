@@ -64,9 +64,13 @@ table {
     --text-color: #505050;
     --text-color-strong: #000000;
     --background-color: #ffffff;
+    --info-color-text: #505050;
+    --info-color-border: #446bb8;
+    --info-color-background: #c0cbff;
     --error-color-text: #C00000;
     --error-color-border: #C00000;
     --error-color-background: #FFc0c0;
+    --warn-color-text: #000000;
     --warn-color-border: #F6AF65;
     --warn-color-background: #f7d1a9;
 
@@ -157,11 +161,20 @@ i {
     font-style: italic;
 }
 
+.info {
+    margin: 0.3rem auto;
+    padding: 0.2rem;
+    border: 0.1rem dotted var(--info-color-border);
+    background-color: var(--info-color-background);
+    color: var(--info-color-text);
+}
+
 .warn {
-    padding: 0.5rem;
-    border: 0.3rem solid var(--warn-color-border);
+    margin: 0.3rem auto;
+    padding: 0.2rem;
+    border: 0.1rem dotted var(--warn-color-border);
     background-color: var(--warn-color-background);
-    color: var(--text-color-strong);
+    color: var(--warn-color-text);
     font-weight: 500;
 }
 
@@ -172,6 +185,12 @@ i {
     background-color: var(--error-color-background);
     color: var(--error-color-text);
     font-weight: 500;
+}
+
+.info:empty,
+.warn:empty,
+.error:empty {
+    display: none;
 }
 
 td,
@@ -300,10 +319,6 @@ textarea:user-invalid {
 div:has(>input[required])>label::after {
     content: " *";
     color: var(--error-color-text)
-}
-
-:has(>input) .error:empty {
-    display: none;
 }
 
 form:has(label>input[required])::before {

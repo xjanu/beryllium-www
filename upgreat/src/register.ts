@@ -5,6 +5,7 @@ import fastifyFormbody from '@fastify/formbody'
 import qs from 'qs'
 import localize from 'ajv-i18n'
 import { eq } from 'drizzle-orm'
+import { assert } from "node:console"
 
 import { guardianTable, childTable, genderEnum } from "./db/schema.ts"
 
@@ -164,14 +165,32 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
     fastify.post( "/register", {
         attachValidation: true,
         schema: register_schema}, async (req, reply) => {
-        console.log(req.body)
 
         if (req.validationError) {
             (localize as any).sk(req.validationError.validation)
-            console.log(req.validationError.validation)
             return reply.code(400)
                         .view("register.njk", {
                 value: req.body, error: new FormError(req.validationError.validation).error})
+        }
+
+        let error = {children: []}
+        for (const req_child_no in req.body.children) {
+            const req_child = req.body.children[req_child_no]
+            const days: string[] = []
+            for (const day in req_child.days) {
+                if (req_child.days[day] == "on") {
+                    days.push(day)
+                }
+            }
+            assert(days.length > 0)
+            if (days.includes('all') && days.length > 1) {
+                error["children"][req_child_no] = {days: "Nesmie byť zároveň zaškrtnutá položka 'Všetky dni' a ľubovoľný konkrétny deň."}
+            }
+        }
+        if (error) {
+            return reply.code(400)
+                        .view("register.njk", {
+                value: req.body, error: error})
         }
 
         // TODO: use typebox for type inference
