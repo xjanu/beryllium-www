@@ -30,6 +30,7 @@ services:
       - nginx-cache:/var/cache/nginx:rw
       - nginx-pid:/var/run:rw
       - ./nginx/static:/www/static:ro
+      - ./upgreat/templates/static:/www/upgreat-static:ro
       - acme-challenge:/www/acme:ro
       - acme-certificates:/etc/nginx/ssl:ro
     restart: always
