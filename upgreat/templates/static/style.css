@@ -137,6 +137,15 @@ h6 {
     margin-top: 1em;
 }
 
+header,
+header *,
+form,
+form *,
+table.fancy,
+a[href].fancy {
+    font-family: "Roboto", sans-serif;
+}
+
 span {
     display: inline-block;
 }
@@ -181,8 +190,6 @@ a[href].fancy {
     border-radius: 0.5rem;
     color: 0.5rem solid var(--text-color-strong);
     background: linear-gradient(12deg, rgba(247, 225, 203, 1) 0%, rgba(247, 209, 169, 1) 50%, rgba(246, 175, 101, 1) 100%);
-    font-family: "Roboto", sans-serif;
-
 }
 
 a[href].fancy:hover {
@@ -258,10 +265,6 @@ th {
     text-align: left;
 }
 
-table.fancy {
-    font-family: "Roboto", sans-serif;
-}
-
 table.fancy th {
     color: var(--text-color-strong);
     font-weight: 500;
@@ -299,7 +302,6 @@ table td.textual {
 
 form {
     background: var(--secondary-color-lighter);
-    font-family: "Roboto", sans-serif;
     padding:1em;
 }
 
@@ -386,8 +388,6 @@ header {
     column-gap: 1rem;
 
     background-color: var(--primary-color);
-    font-family: "Roboto", sans-serif;
-    font-weight: 400;
     font-size: 110%;
 }
 
