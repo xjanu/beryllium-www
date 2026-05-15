@@ -36,7 +36,7 @@
             <label for="guardian_email">Email</label><br>
             <input id="guardian_email" name="guardian_email"
                    type="email" autocomplete="email"
-                   required
+                   required pattern="^..*@..*\...*$"
                    value="{{ value.guardian_email }}"/><br>
             <div class="error">{{ error.guardian_email }}</div>
         </div>
