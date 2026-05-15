@@ -102,7 +102,6 @@ table {
     --secondary-color-lighter: #f7e1cb;
     --gray-light: #e0e0e0;
     --text-color: #505050;
-    --text-color-strong: #000000;
     --background-color: #ffffff;
     --info-color-text: #505050;
     --info-color-border: #446bb8;
@@ -146,6 +145,17 @@ a[href].fancy {
     font-family: "Roboto", sans-serif;
 }
 
+b,
+strong,
+label,
+.warn,
+.error,
+a[href],
+form fieldset.radio legend,
+table.fancy th {
+    font-weight: 700;
+}
+
 span {
     display: inline-block;
 }
@@ -173,7 +183,6 @@ h4 {
 
 a[href] {
     color: var(--primary-color-dark);
-    font-weight: 500;
     text-decoration: none;
 }
 
@@ -211,8 +220,7 @@ small,
 
 b,
 strong {
-    color: var(--text-color-strong);
-    font-weight: 500;
+    color: oklch(from currentColor calc(l - 0.15) c h);
 }
 
 i,
@@ -234,7 +242,6 @@ em {
     border: 0.1rem dotted var(--warn-color-border);
     background-color: var(--warn-color-background);
     color: var(--warn-color-text);
-    font-weight: 500;
 }
 
 .error {
@@ -243,7 +250,6 @@ em {
     border: 0.1rem dotted var(--error-color-border);
     background-color: var(--error-color-background);
     color: var(--error-color-text);
-    font-weight: 500;
 }
 
 .info:empty,
@@ -267,7 +273,6 @@ th {
 
 table.fancy th {
     color: var(--text-color-strong);
-    font-weight: 500;
     text-align: center;
 }
 
@@ -309,7 +314,6 @@ label {
     display: inline-block;
     padding-top: 0.5em;
     color: var(--text-color-strong);
-    font-weight: 500;
 }
 
 form textarea {
@@ -347,7 +351,6 @@ form fieldset.radio legend {
     line-break: initial;
     font-size: initial;
     color: var(--text-color-strong);
-    font-weight: 500;
     padding-top: 0.5em;
 }
 
