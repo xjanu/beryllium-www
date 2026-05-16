@@ -32,11 +32,13 @@ server.decorate('db', db)
 // nodemailer
 const smtp = nodemailer.createTransport({
     service: "seznam",
+    port: 587,        // STARTTLS port can be used from Hetzner
+    secure: false,    // This is ok in conjunction with requireTLS
+    requireTLS: true,
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
-    },
-    requireTLS: true
+    }
 });
 try {
     await smtp.verify();
