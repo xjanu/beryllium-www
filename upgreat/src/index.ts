@@ -4,6 +4,7 @@ import fastifyView from '@fastify/view'
 import Nunjucks from 'nunjucks'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import nodemailer from 'nodemailer'
 
 import static_routes from './static.ts'
 import register_routes from './register.ts'
@@ -27,6 +28,23 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 server.decorate('db', db)
+
+// nodemailer
+const smtp = nodemailer.createTransport({
+    service: "seznam",
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+    },
+    requireTLS: true
+});
+try {
+    await smtp.verify();
+    console.log("SMTP server is ready.");
+} catch (err) {
+    console.error("Verification failed:", err);
+}
+server.decorate('smtp', smtp)
 
 // fastify-view
 server.register(fastifyView, {
