@@ -20,7 +20,6 @@ export const childTable = pgTable("child", {
   municipality: text().notNull(),
   street_with_number: text().notNull(),
   postal_code: text().notNull(),
-  days_all: boolean().notNull(),
   days_mon: boolean().notNull(),
   days_tue: boolean().notNull(),
   days_wed: boolean().notNull(),
