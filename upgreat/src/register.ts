@@ -10,16 +10,6 @@ import { assert } from "node:console"
 import { guardianTable, childTable, genderEnum } from "./db/schema.ts"
 
 
-// TODO: register as fastify plugin
-import { drizzle } from 'drizzle-orm/node-postgres'
-import { migrate } from 'drizzle-orm/node-postgres/migrator'
-const db = drizzle(process.env.DATABASE_URL!);
-if (process.env.NODE_ENV === 'production') {
-    await migrate(db, {
-        migrationsFolder: "./drizzle-migrations",
-    });
-}
-
 const MAX_CHILDREN_SOFTLIMIT = 50;
 
 class FormError {
@@ -177,7 +167,7 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
 
     fastify.get('/register', async (req, reply) => {
         return reply.view('register.njk', {
-            overlimit: (await db.$count(childTable)) >= MAX_CHILDREN_SOFTLIMIT
+            overlimit: (await fastify.db.$count(childTable)) >= MAX_CHILDREN_SOFTLIMIT
         })
     })
 
@@ -237,7 +227,7 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
             email: req.body.guardian_email,
             tel: req.body.guardian_tel
         }
-        const inserted_guardian = await db.insert(guardianTable).values(guardian).returning();
+        const inserted_guardian = await fastify.db.insert(guardianTable).values(guardian).returning();
 
         for (const req_child of req.body.children) {
             const child: typeof childTable.$inferInsert = {
@@ -256,12 +246,12 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
                 days_fri: req_child.days.all === 'on' || req_child.days.friday === 'on',
                 more_info: req_child.more_info,
             }
-            await db.insert(childTable).values(child);
+            await fastify.db.insert(childTable).values(child);
         }
 
         reply.code(303) // See Other
             .header('Location',
-                    (await db.$count(childTable)) > MAX_CHILDREN_SOFTLIMIT ?
+                    (await fastify.db.$count(childTable)) > MAX_CHILDREN_SOFTLIMIT ?
                         './register-overlimit' :
                         './register-success' )
             .send()
