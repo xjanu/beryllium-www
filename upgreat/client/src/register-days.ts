@@ -25,6 +25,7 @@ export class DaysHandler {
                 for (const input_day of input_days) {
                     input_day.checked = input_all.checked
                 }
+                warn_div.innerText = ""
             })
             for (const input_day of input_days) {
                 input_day.addEventListener("input", () => {
