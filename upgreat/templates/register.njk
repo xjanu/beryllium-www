@@ -7,6 +7,13 @@
     Prosím vyplňte údaje v tomto formulári pravdivo a presne, vyhneme sa tým
     nepríjemnostiam s hľadaním a opravovaním chýb.
 </p>
+{% if overlimit %}
+    <p class="info">
+        Pozor, počet prihlášok naplnil kapacitu tábora. Prihlášku však stále
+        môžete podať a v prípade uvoľnenia miesta Vás kontaktujeme. Ďakujeme za
+        Váš záujem.
+    </p>
+{% endif %}
 
 <form method="post">
 
