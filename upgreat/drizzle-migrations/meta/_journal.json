@@ -15,6 +15,13 @@
       "when": 1778705456867,
       "tag": "0001_parallel_zaran",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778952768341,
+      "tag": "0002_wealthy_iron_fist",
+      "breakpoints": true
     }
   ]
 }

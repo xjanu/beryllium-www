@@ -74,8 +74,9 @@
         <label>
             <input type="checkbox" class="child-days-all" name="children[{{child_number}}][days][all]"
                    {% if value.children[child_number].days.all %}checked{% endif %}
-            /> Všetky dni
-        </label><br>
+                   hidden disabled
+            /> Všetky dni<br>
+        </label>
         <label>
             <input type="checkbox" class="child-days" name="children[{{child_number}}][days][monday]"
                    {% if value.children[child_number].days.monday %}checked{% endif %}

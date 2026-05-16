@@ -218,8 +218,9 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
                 }
             }
             assert(days.length > 0, "days.length > 0")
-            if (days.includes('all') && days.length > 1) {
-                error["children"][req_child_no] = {days: "Nesmie byť zároveň zaškrtnutá položka 'Všetky dni' a ľubovoľný konkrétny deň."}
+            if (days.includes('all') && days.length != 6) {
+                error["children"][req_child_no] = {days:
+                    "Pokiaľ je zaškrtnutá položka 'Všetky dni', musia byť zaškrtnuté aj všetky konkrétne dni."}
             }
         }
         if (error.children.length > 0) {
@@ -248,12 +249,11 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
                 municipality: req_child.municipality,
                 street_with_number: req_child.street_with_number,
                 postal_code: req_child.postal_code,
-                days_all: req_child.days.all === 'on',
-                days_mon: req_child.days.monday === 'on',
-                days_tue: req_child.days.tuesday === 'on',
-                days_wed: req_child.days.wednesday === 'on',
-                days_thu: req_child.days.thursday === 'on',
-                days_fri: req_child.days.friday === 'on',
+                days_mon: req_child.days.all === 'on' || req_child.days.monday === 'on',
+                days_tue: req_child.days.all === 'on' || req_child.days.tuesday === 'on',
+                days_wed: req_child.days.all === 'on' || req_child.days.wednesday === 'on',
+                days_thu: req_child.days.all === 'on' || req_child.days.thursday === 'on',
+                days_fri: req_child.days.all === 'on' || req_child.days.friday === 'on',
                 more_info: req_child.more_info,
             }
             await db.insert(childTable).values(child);

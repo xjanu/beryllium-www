@@ -316,6 +316,10 @@ label {
     color: var(--text-color-strong);
 }
 
+label:has(input[hidden]) {
+    display: none;
+}
+
 form textarea {
     width: 100%;
 }

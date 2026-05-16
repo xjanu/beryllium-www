@@ -19,26 +19,29 @@ export class DaysHandler {
                 throw new Error(`\`[name='${child.name}'] .child-days-info\` not found.`)
             }
 
+            input_all.disabled = false
+            input_all.hidden = false
             input_all.addEventListener("input", () => {
-                if (input_all.checked) {
-                    for (const input_day of input_days) {
-                        input_day.checked = false
-                    }
+                for (const input_day of input_days) {
+                    input_day.checked = input_all.checked
                 }
             })
             for (const input_day of input_days) {
                 input_day.addEventListener("input", () => {
-                    if (input_day.checked) {
+                    if (! input_day.checked) {
                         input_all.checked = false
                     }
                     let days_checked_count = 0
                     for (const input_day_inner of input_days) {
                         days_checked_count += input_day_inner.checked ? 1 : 0
                     }
-                    if (days_checked_count >= 4) {
-                        warn_div.innerText = "Pri účasti na viac než troch dňoch budeme účtovať výhodnejšiu cenu za celý tábor."
+                    if (days_checked_count == 4) {
+                        warn_div.innerText = "Pri účasti na štyroch dňoch budeme účtovať výhodnejšiu cenu za celý tábor."
                     } else {
                         warn_div.innerText = ""
+                    }
+                    if (days_checked_count == 5) {
+                        input_all.checked = true
                     }
                 })
             }

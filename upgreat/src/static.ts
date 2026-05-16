@@ -9,15 +9,6 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
     prefix: '/static/',
   })
 
-  fastify.get('/style.css', async (req, reply) => {
-    return reply.sendFile('style.css')
-  })
-
-  fastify.get('/favicon.png', async (req, reply) => {
-    return reply.sendFile('favicon.png')
-  })
-
-
   // Serve also client javascript
   fastify.register(FastifyStatic, {
     root: path.resolve('client/dist/'),
