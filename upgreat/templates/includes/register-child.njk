@@ -71,12 +71,15 @@
         <p>
             Cena sa riadi <a href="/#price">platným cenníkom</a>.
         </p>
-        <label>
-            <input type="checkbox" class="child-days-all" name="children[{{child_number}}][days][all]"
-                   {% if value.children[child_number].days.all %}checked{% endif %}
-                   hidden disabled
-            /> Všetky dni<br>
-        </label>
+        <div>
+            <input id="children[{{child_number}}][days][all]" name="children[{{child_number}}][days][all]"
+                class="child-days-all"
+                type="checkbox"
+                {% if value.children[child_number].days.all %}checked{% endif %}
+                hidden disabled
+            />
+            <label for="children[{{child_number}}][days][all]">Všetky dni</label><br>
+        </div>
         <label>
             <input type="checkbox" class="child-days" name="children[{{child_number}}][days][monday]"
                    {% if value.children[child_number].days.monday %}checked{% endif %}

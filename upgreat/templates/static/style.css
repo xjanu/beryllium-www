@@ -316,7 +316,7 @@ label {
     color: var(--text-color-strong);
 }
 
-label:has(input[hidden]) {
+div:has(input[hidden]) {
     display: none;
 }
 
