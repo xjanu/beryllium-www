@@ -20,6 +20,8 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
+const MAX_CHILDREN_SOFTLIMIT = 50;
+
 class FormError {
     error: any = {}
     messages: string[] = []
@@ -174,13 +176,17 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
     fastify.register(fastifyFormbody, {parser: qs.parse})
 
     fastify.get('/register', async (req, reply) => {
-        return reply.view('register.njk')
+        return reply.view('register.njk', {
+            overlimit: (await db.$count(childTable)) >= MAX_CHILDREN_SOFTLIMIT
+        })
     })
 
     fastify.post( "/register", {
         attachValidation: true,
         schema: register_schema}, async (req, reply) => {
-            
+
+        // Error handling
+
         if (req.validationError) {
             (localize as any).sk(req.validationError.validation)
             return reply.code(400)
@@ -222,6 +228,8 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
                 value: req.body, error: error})
         }
 
+        // Happy path
+
         // TODO: use typebox for type inference
         const guardian: typeof guardianTable.$inferInsert = {
             name: req.body.guardian_name,
@@ -252,12 +260,19 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
         }
 
         reply.code(303) // See Other
-            .header('Location', './register-success')
+            .header('Location',
+                    (await db.$count(childTable)) > MAX_CHILDREN_SOFTLIMIT ?
+                        './register-overlimit' :
+                        './register-success' )
             .send()
     })
 
     fastify.get('/register-success', async (req, reply) => {
         return reply.view('register-success.njk')
+    })
+
+    fastify.get('/register-overlimit', async (req, reply) => {
+        return reply.view('register-overlimit.njk')
     })
 }
 
