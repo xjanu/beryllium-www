@@ -4,11 +4,9 @@ Meno:   {{ guardian_name }}
 Email:  {{ guardian_email }}
 Tel. č: {{ guardian_tel }}
 
-{% for child in children -%}
-{{loop.index}}. Dieťa
-{%- if loop.first %}
+{% for child in children %}
 =================================================
-{%- endif %}
+Dieťa {{loop.index}}/{{loop.length}}
 
 Meno:            {{ child.forename }}
 Prievisko:       {{ child.surname }}
@@ -22,8 +20,11 @@ Dni:             {% if child.days.all %}Všetky dni{% else %}{{ child.days.strin
 Ďalšie informácie:
 {{ child.more_info }}
 {%- endif %}
+{%- if loop.last %}
 =================================================
+{%- endif %}
 {%- endfor %}
+
 
 S pozdravom,
 register-email.njk
