@@ -1,0 +1,11 @@
+{% extends "layouts/email-noreply.plaintext.njk" %}
+
+{% block maincontent -%}
+celkový počet rezervácií: {{ reservations_count }}
+                    detí: {{ child_count }}.
+{%- endblock %}
+
+{% block emailreason -%}
+Tento email sa odosiela vždy pri dosiahnutí
+hranice násobkov {{ threshold }} počtu detí.
+{%- endblock %}

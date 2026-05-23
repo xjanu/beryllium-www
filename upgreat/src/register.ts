@@ -11,6 +11,7 @@ import { guardianTable, childTable, genderEnum } from "./db/schema.ts"
 
 
 const MAX_CHILDREN_SOFTLIMIT = 50;
+const EMAIL_THRESHOLD_CHILD_COUNT = 5;
 
 class FormError {
     error: any = {}
@@ -231,6 +232,7 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
         }
         const inserted_guardian = await fastify.db.insert(guardianTable).values(guardian).returning();
 
+        const child_count_before_insert: number = await fastify.db.$count(childTable);
         for (const req_child of req.body.children) {
             const child: typeof childTable.$inferInsert = {
                 guardian_id: inserted_guardian[0].id,
@@ -250,14 +252,21 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
             }
             await fastify.db.insert(childTable).values(child);
         }
+        const child_count_after_insert: number = await fastify.db.$count(childTable);
 
         // Send registration mail
+        if (Math.floor(child_count_before_insert / EMAIL_THRESHOLD_CHILD_COUNT)
+            < Math.floor(child_count_after_insert / EMAIL_THRESHOLD_CHILD_COUNT))
         try {
-            const message = await fastify.view('layouts/register-email.njk', req.body)
+            const message = await fastify.view('email/register-count.plaintext.njk', {
+                reservations_count: await fastify.db.$count(guardianTable),
+                child_count: child_count_after_insert,
+                threshold: EMAIL_THRESHOLD_CHILD_COUNT
+            })
             const info = await fastify.smtp.sendMail({
                 from: `"noreply" <${process.env.SMTP_USER}>`,
                 to: process.env.MAIL_TO,
-                subject: "Nová registrácia",
+                subject: "Nové registrácie",
                 text: message
             });
         } catch (err) {
