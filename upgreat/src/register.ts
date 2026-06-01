@@ -259,6 +259,7 @@ const routes = async (fastify: FastifyInstance, options: Object) => {
             < Math.floor(child_count_after_insert / EMAIL_THRESHOLD_CHILD_COUNT))
         try {
             const message = await fastify.view('email/register-count.plaintext.njk', {
+                script_name: "register.ts",
                 reservations_count: await fastify.db.$count(guardianTable),
                 child_count: child_count_after_insert,
                 threshold: EMAIL_THRESHOLD_CHILD_COUNT
