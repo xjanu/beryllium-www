@@ -115,7 +115,9 @@ for (const g of guardians) {
         console.log(message_plaintext)
         const info = await smtp.sendMail({
            from: `"noreply" <${process.env.SMTP_USER}>`,
-           to: process.env.MAIL_TO,
+           to: g.email,
+           cc: process.env.MAIL_TO,
+           bcc: process.env.MAIL_BCC,
            replyTo: process.env.MAIL_TO,
            subject: "Letný tábor UpGREAT - Informácie k platbe",
            text: message_plaintext,
