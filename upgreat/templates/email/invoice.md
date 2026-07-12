@@ -16,7 +16,7 @@ Každý deň budeme deti vítať od **8:00**, program sa začne o **8:30** a kon
 
 ### Úhrada účastníckeho poplatku
 
-Prosíme o úhradu účastníckeho poplatku vo výške **{{ price }}€** najneskôr do **26. júla 2026**.
+Prosíme o úhradu účastníckeho poplatku vo výške **{{ price }}€** do **26. júla 2026**. Ak je pre Vás cena privysoká, kontaktujte nás, môžeme poskytnúť individuálny sponzoring.
 
 **Bankové spojenie:**\
 IBAN: **SK26 8330 0000 0022 0354 0671**
