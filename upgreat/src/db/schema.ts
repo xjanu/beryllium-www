@@ -28,3 +28,21 @@ export const childTable = pgTable("child", {
   more_info: text(),
   created_at: timestamp().notNull().defaultNow()
 });
+
+export const invoiceTable = pgTable("invoice", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  guardian_id: integer().references(() => guardianTable.id),
+  amount_eur_cents: integer().notNull(),
+  variable_symbol: integer().unique().notNull(),
+  fulfilled: boolean().notNull().default(false),
+  pay_until: timestamp().notNull(),
+  created_at: timestamp().notNull().defaultNow()
+})
+
+export const paymentTable = pgTable("payment", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  invoice_id: integer().references(() => invoiceTable.id),
+  amount_eur_cents: integer().notNull(),
+  variable_symbol: integer().notNull(),
+  created_at: timestamp().notNull().defaultNow()
+})
