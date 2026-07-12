@@ -1,0 +1,49 @@
+Milí rodičia,
+
+ďakujeme za prejavenú dôveru, keď ste svoje dieťa prihlásili na **1. UpGREAT Camp: From Zero to Hero**. Veľmi si vážime, že môžeme byť súčasťou vašich letných prázdnin.
+
+Počas tábora deti čaká týždeň plný hier, dobrodružstiev, nových priateľstiev, tvorivých aktivít a nezabudnuteľných zážitkov. Naším cieľom je vytvoriť bezpečné prostredie, v ktorom si každé dieťa nájde svoje miesto, objaví svoje silné stránky a odnesie si domov množstvo pekných spomienok.
+
+**Psst...** Ak čítate tento e-mail spolu s deťmi, môžete im prezradiť iba toto: Tento rok sa vydáme na výpravu **From Zero to Hero**. O tom, aké výzvy deti čakajú a čo všetko budú musieť zvládnuť, zatiaľ viac neprezradíme.
+
+### Organizačné informácie
+
+Tábor sa uskutoční v termíne **10. – 14. augusta 2026**.
+
+V pondelok (10. 8.) sa stretneme na adrese **Prípojná 5, Podunajské Biskupice**.
+
+Každý deň budeme deti vítať od **8:00**, program sa začne o **8:30** a končiť bude o **16:30**. Prosíme, aby ste si deti vyzdvihli do **17:00**.
+
+### Úhrada účastníckeho poplatku
+
+Prosíme o úhradu účastníckeho poplatku vo výške **{{ price }}€** najneskôr do **26. júla 2026**.
+
+**Bankové spojenie:**\
+IBAN: **SK26 8330 0000 0022 0354 0671**
+
+**Majiteľ účtu:**\
+**OZ UpGREAT**
+
+**Variabilný symbol:**\
+{{ variable_symbol }}
+
+**Detailné vyúčtovanie:**
+
+{% for item in price_calculation %}
+{{ item.child_name }}\
+\  Počet dní: {{ item.num_days }}\
+\  Cena: {{ item.price }}€\
+{% endfor %}\
+Spolu: **{{ price }}€**
+
+### Čo bude nasledovať?
+
+Dva týždne pred začiatkom tábora vám pošleme ďalší e-mail s podrobnými organizačnými informáciami. Nájdete v ňom zoznam, čo odporúčame deťom pribaliť, dôležité pokyny aj všetko, čo budete pred začiatkom tábora potrebovať vedieť.
+
+Ak by ste dovtedy mali akékoľvek otázky, neváhajte nás kontaktovať. Radi ich zodpovieme.
+
+Tešíme sa na spoločné letné dobrodružstvo!
+
+S pozdravom,
+
+**Tím UpGREAT**
