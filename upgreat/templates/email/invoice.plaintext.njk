@@ -40,11 +40,11 @@ Variabilný symbol:
 
 Detailné vyúčtovanie:
 
-{%- for item in price_calculation %} {{ item.child_name }}
+{% for item in price_calculation %} {{ item.child_name }}
   Počet dní: {{ item.num_days }}
   Cena: {{ item.price }}€
 {% endfor %}
-Spolu: { price }€
+Spolu: {{ price }}€
 
 Čo bude nasledovať?
 

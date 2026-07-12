@@ -29,11 +29,11 @@ IBAN: <strong>SK26 8330 0000 0022 0354 0671</strong></p>
 <p><strong>Variabilný symbol:</strong><br />
 {{ variable_symbol }}</p>
 <p><strong>Detailné vyúčtovanie:</strong></p>
-<p>{%- for item in price_calculation %} {{ item.child_name }}<br />
+<p>{% for item in price_calculation %} {{ item.child_name }}<br />
   Počet dní: {{ item.num_days }}<br />
   Cena: {{ item.price }}€<br />
 {% endfor %}<br />
-Spolu: <strong>{ price }€</strong></p>
+Spolu: <strong>{{ price }}€</strong></p>
 <h3 id="čo-bude-nasledovať">Čo bude nasledovať?</h3>
 <p>Dva týždne pred začiatkom tábora vám pošleme ďalší e-mail s
 podrobnými organizačnými informáciami. Nájdete v ňom zoznam, čo
