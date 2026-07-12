@@ -5,7 +5,6 @@ import Nunjucks from 'nunjucks'
 
 import { relations } from "./db/relations.ts";
 import { invoiceTable } from './db/schema.ts';
-import { QueryResult } from 'pg';
 
 const PRICE_PER_DAY = 2500
 const PRICE_FULL = 9800
@@ -116,8 +115,7 @@ for (const g of guardians) {
         console.log(message_plaintext)
         const info = await smtp.sendMail({
            from: `"noreply" <${process.env.SMTP_USER}>`,
-           to: g.email,
-           cc: process.env.MAIL_TO,
+           to: process.env.MAIL_TO,
            replyTo: process.env.MAIL_TO,
            subject: "Letný tábor UpGREAT - Informácie k platbe",
            text: message_plaintext,
