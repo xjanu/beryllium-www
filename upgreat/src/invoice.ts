@@ -69,7 +69,7 @@ for (const g of guardians) {
         price_calculation.push({
             "child_name": `${c.forename} ${c.surname}`,
             "num_days": num_days,
-            "price": price / 100
+            "price": partial_price / 100
         })
     }
 
