@@ -1,0 +1,1 @@
+ALTER TABLE "payment" ALTER COLUMN "transaction_id" SET DATA TYPE text USING "transaction_id"::text;

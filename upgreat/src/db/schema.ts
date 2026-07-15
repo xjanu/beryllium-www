@@ -44,5 +44,7 @@ export const paymentTable = pgTable("payment", {
   invoice_id: integer().references(() => invoiceTable.id),
   amount_eur_cents: integer().notNull(),
   variable_symbol: integer().notNull(),
+  transaction_id: text().unique().notNull(),  // Unique transaction id from bank
+  transaction_date: date().notNull(),         // Transaction date from bank
   created_at: timestamp().notNull().defaultNow()
 })

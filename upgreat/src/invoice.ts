@@ -1,10 +1,16 @@
 import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres'
+import { DrizzleQueryError, eq } from 'drizzle-orm'
 import nodemailer from 'nodemailer'
 import Nunjucks from 'nunjucks'
+import https from 'https'
+import Type from 'typebox'
+import _Ajv from "ajv";
+const Ajv = _Ajv as unknown as typeof _Ajv.default;
+const ajv = new Ajv()
 
-import { relations } from "./db/relations.ts";
-import { invoiceTable } from './db/schema.ts';
+import { relations } from "./db/relations.ts"
+import { invoiceTable, paymentTable } from './db/schema.ts'
 
 const PRICE_PER_DAY = 2500
 const PRICE_FULL = 9800
@@ -84,7 +90,7 @@ for (const g of guardians) {
                 guardian_id: g.id,
                 amount_eur_cents: price,
                 variable_symbol: variable_symbol,
-                pay_until: new Date("2026-08-09T00:00:00")
+                pay_until: new Date("2026-08-15T00:00:00")
             }
             inserted_invoice = await db.insert(invoiceTable).values(invoice).returning({
                 variable_symbol: invoiceTable.variable_symbol
@@ -102,7 +108,6 @@ for (const g of guardians) {
         continue
     }
 
-    // TODO: Send email
     try {
         const values = {
             variable_symbol: inserted_invoice[0].variable_symbol,
@@ -137,3 +142,147 @@ const g2 = await db.query.guardianTable.findMany({
 for (const g of g2) {
     console.log(g)
 }
+
+const FioTransaction = Type.Object({
+    column22: Type.Object({
+        id: Type.Literal(22),
+        name: Type.Literal("ID pohybu"),
+        value: Type.Integer()
+    }),
+    column0: Type.Object({
+        id: Type.Literal(0),
+        name: Type.Literal("Datum"),
+        value: Type.String({pattern: "[0-9]{4}-[0-9]{2}-[0-9]{2}"})
+    }),
+    column1: Type.Object({
+        id: Type.Literal(1),
+        name: Type.Literal("Objem"),
+        value: Type.Integer()
+    }),
+    column14: Type.Object({
+        id: Type.Literal(14),
+        name: Type.Literal("Měna"),
+        value: Type.String()
+    }),
+    column5: Type.Object({
+        id: Type.Literal(5),
+        name: Type.Literal("VS"),
+        value: Type.String({pattern: "[0-9]{0,10}"})
+    }),
+    column8: Type.Object({
+        id: Type.Literal(8),
+        name: Type.Literal("Typ"),
+        value: Type.String()
+    })
+})
+
+const FioApi = Type.Object({
+    accountStatement: Type.Object({
+        info: Type.Object({}),
+        transactionList: Type.Object({
+            transaction: Type.Array(FioTransaction)
+        })
+    })
+})
+
+const validate = ajv.compile<Type.Static<typeof FioApi>>(FioApi)
+
+const req = https.request({
+    hostname: 'fioapi.fio.cz',
+    path: `/v1/rest/periods/${process.env.FIO_TOKEN}/2026-07-01/2026-09-01/transactions.json`,
+    method: 'GET'
+}, (res) => {
+    let data = ''
+
+    res.on('data', (chunk) => {
+        data += chunk;
+    });
+
+    // Response complete
+    res.on('end', async () => {
+        const fioapi = JSON.parse(data)
+        console.log(JSON.stringify(fioapi, null, "  "))
+
+        if (!validate(fioapi)) {
+            console.error("Validation error:")
+            console.error(validate.errors)
+            return
+        }
+
+        console.log(fioapi.accountStatement)
+        const transactions = fioapi.accountStatement
+                                   .transactionList
+                                   .transaction
+                                   .map((t) => { return {
+            "transaction_id": t.column22.value,
+            "transaction_date": t.column0.value,
+            "amount": t.column1.value,
+            "currency": t.column14.value,
+            "variable_symbol": t.column5.value,
+            "type": t.column8.value
+        }})
+        console.log(transactions)
+
+        for (const t of transactions) {
+            if (t.currency != "EUR") {
+                console.error(`Wrong currency: ${t.currency} VS: ${t.variable_symbol}`)
+                continue
+            }
+            if (!t.type.toLowerCase().includes("příchozí")) {
+                console.error(`Wrong type: ${t.type} VS: ${t.variable_symbol}`)
+                continue
+            }
+
+            const variable_symbol = Number(t.variable_symbol)
+
+            const invoice = await db.query.invoiceTable.findFirst({
+                where: {
+                    variable_symbol: {eq: variable_symbol},
+                    pay_until: {gte: new Date(t.transaction_date)},
+                    created_at: {lte: new Date(t.transaction_date)}
+                },
+                with: {payments: true}
+            })
+            if (invoice == undefined) {
+                console.error(`Invalid variable symbol: ${variable_symbol}`)
+                continue
+            }
+
+            const payment: typeof paymentTable.$inferInsert = {
+                amount_eur_cents: t.amount * 100,
+                variable_symbol: variable_symbol,
+                transaction_id: String(t.transaction_id),
+                transaction_date: t.transaction_date,
+                invoice_id: invoice.id
+            }
+            try {
+                await db.insert(paymentTable).values(payment);
+            }
+            catch (e) {
+                if (e instanceof DrizzleQueryError && e.cause && e.cause.message == 'duplicate key value violates unique constraint "payment_transaction_id_key"') {
+                    continue
+                }
+                throw e
+            }
+
+            const invoice_paid_amount = invoice.payments.reduce((acc, p) => {
+                    return acc + p.amount_eur_cents
+                }, 0) + payment.amount_eur_cents
+            if (invoice_paid_amount != invoice.amount_eur_cents) {
+                const direction = invoice_paid_amount < invoice.amount_eur_cents ? "under" : "over"
+                console.warn(`Invoice ${direction}paid: VS: ${variable_symbol} paid: ${invoice_paid_amount}/${invoice.amount_eur_cents}`)
+            }
+            if (invoice_paid_amount >= invoice.amount_eur_cents) {
+                await db.update(invoiceTable).set({
+                    fulfilled: true
+                }).where(eq(invoiceTable.id, invoice.id))
+                console.log(`Invoice fulfilled: VS: ${variable_symbol} paid: ${invoice_paid_amount}/${invoice.amount_eur_cents}`)
+            }
+
+            // TODO: Send email
+        }
+    });
+
+}).on("error", (err) => {
+    console.log("Error: ", err)
+}).end()
