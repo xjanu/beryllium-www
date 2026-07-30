@@ -124,16 +124,32 @@ body {
     background: var(--background-color);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+main h1,
+main h2,
+main h3,
+main h4,
+main h5,
+main h6 {
     font-family: "Racing Sans One", sans-serif;
     font-weight: 400;
     line-height: 1.2;
     margin-top: 1em;
+}
+
+aside h1,
+aside h2,
+aside h3,
+aside h4,
+aside h5,
+aside h6 {
+    font-family: "Roboto Slab", serif;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-top: 1em;
+}
+aside h1 {
+    font-size: 200%;
+    font-variant-caps: small-caps;
 }
 
 header,
@@ -256,6 +272,15 @@ em {
 .warn:empty,
 .error:empty {
     display: none;
+}
+
+ul,
+ol {
+    margin-left: 1em;
+}
+
+ul>li {
+    list-style: disc outside;
 }
 
 td,
@@ -430,7 +455,8 @@ header>.burger:hover {
     background-color: var(--primary-color-light);
 }
 
-main>* {
+main>*,
+aside>* {
     max-width: 50rem;
     margin-left: auto;
     margin-right: auto;
@@ -438,18 +464,21 @@ main>* {
     padding-right: 1rem;
 }
 
-main>*.wide {
+main>*.wide,
+aside>*.wide {
     max-width: unset;
     overflow: scroll;
 }
 
-main>*.wide>* {
+main>*.wide>*,
+aside>*.wide>* {
     margin: auto;
 }
 
 @media only screen and (max-width: 600px) {
 
-    main {
+    main,
+    aside {
         margin-top: var(--header-line-height);
     }
 
