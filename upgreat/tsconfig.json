@@ -8,9 +8,7 @@
     "strict": true,
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
-    "rewriteRelativeImportExtensions": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "rewriteRelativeImportExtensions": true
   },
   "include": ["src"]
 }
