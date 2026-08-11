@@ -7,7 +7,6 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import nodemailer from 'nodemailer'
 
 import static_routes from './static.ts'
-import register_routes from './register.ts'
 
 // Server definition
 const server = fastify({
@@ -59,13 +58,12 @@ server.register(fastifyView, {
 
 // Include routes
 server.register(static_routes)
-server.register(register_routes)
 
 // Simple routes
 server.get("/", async (req, reply) => {
     return reply.viewAsync("index.njk", { name: "User" });
 })
-for (const path of ['about', 'contact']) {
+for (const path of ['about', 'contact', 'register']) {
     server.get('/' + path, async (req, reply) => {
         return reply.view(path + '.njk')
     })
