@@ -1,6 +1,3 @@
-include:
-  - upgreat/compose.yaml
-
 services:
 
   webserver:

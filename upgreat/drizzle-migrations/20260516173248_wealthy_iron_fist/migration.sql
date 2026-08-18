@@ -1,1 +1,0 @@
-ALTER TABLE "child" DROP COLUMN "days_all";
