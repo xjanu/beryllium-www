@@ -12,91 +12,9 @@
 	<script type="text/javascript">
 		function I(i) { return document.getElementById(i); }
 
-		//LIST OF TEST SERVERS. Leave empty if you're doing a standalone installation. See documentation for details
-		var SPEEDTEST_SERVERS = [];
-
 		//INITIALIZE SPEEDTEST
 		var s = new Speedtest(); //create speed test object
-		s.setParameter("telemetry_level", "basic"); //enable basic telemetry (for results sharing)
-
-		//SERVER AUTO SELECTION
-		function initServers() {
-			if (SPEEDTEST_SERVERS.length == 0) { //standalone installation
-				//just make the UI visible
-				I("loading").className = "hidden";
-				I("serverArea").style.display = "none";
-				I("testWrapper").className = "visible";
-				initUI();
-			} else { //multiple servers
-				var noServersAvailable = function () {
-					I("message").innerHTML = "No servers available";
-				}
-				var runServerSelect = function () {
-					s.selectServer(function (server) {
-						if (server != null) { //at least 1 server is available
-							I("loading").className = "hidden"; //hide loading message
-							//sort servers by country, then by city
-							//name formats: "City, Country", "City, Country (qualifier)", "City, Country, Provider", "Country"
-							function parseServerName(name) {
-								var parts = (name || "").split(",");
-								for (var p = 0; p < parts.length; p++) parts[p] = parts[p].trim();
-								var country, city;
-								if (parts.length >= 3) {
-									country = parts[1];
-									city = parts[0];
-								} else if (parts.length === 2) {
-									country = parts[1];
-									city = parts[0];
-								} else {
-									country = parts[0];
-									city = "";
-								}
-								country = country.replace(/\s*\([^)]*\)\s*/g, "").trim();
-								return { country: country, city: city };
-							}
-							var indexed = [];
-							for (var j = 0; j < SPEEDTEST_SERVERS.length; j++) {
-								indexed.push({ idx: j, server: SPEEDTEST_SERVERS[j] });
-							}
-							indexed.sort(function (a, b) {
-								var pa = parseServerName(a.server.name);
-								var pb = parseServerName(b.server.name);
-								return pa.country.localeCompare(pb.country) || pa.city.localeCompare(pb.city);
-							});
-							//populate server list for manual selection
-							for (var i = 0; i < indexed.length; i++) {
-								if (indexed[i].server.pingT == -1) continue;
-								var option = document.createElement("option");
-								option.value = indexed[i].idx;
-								option.textContent = indexed[i].server.name;
-								if (indexed[i].server === server) option.selected = true;
-								I("server").appendChild(option);
-							}
-							//show test UI
-							I("testWrapper").className = "visible";
-							initUI();
-						} else { //no servers are available, the test cannot proceed
-							noServersAvailable();
-						}
-					});
-				}
-				if (typeof SPEEDTEST_SERVERS === "string") {
-					//need to fetch list of servers from specified URL
-					s.loadServerList(SPEEDTEST_SERVERS, function (servers) {
-						if (servers == null) { //failed to load server list
-							noServersAvailable();
-						} else { //server list loaded
-							SPEEDTEST_SERVERS = servers;
-							runServerSelect();
-						}
-					});
-				} else {
-					//hardcoded server list
-					s.addTestPoints(SPEEDTEST_SERVERS);
-					runServerSelect();
-				}
-			}
-		}
+		s.setParameter("telemetry_level", "off"); //disable telemetry
 
 		var meterBk = /Trident.*rv:(\d+\.\d+)/i.test(navigator.userAgent) ? "#EAEAEA" : "#80808040";
 		var dlColor = "#6060AA",
@@ -160,7 +78,6 @@
 				s.onend = function (aborted) {
 					I("startStopBtn").className = "";
 					I("startStopBtn").setAttribute("aria-label", "Start");
-					I("server").disabled = false;
 					updateUI(true);
 					if (!aborted) {
 						//if testId is present, show sharing panel, otherwise do nothing
@@ -229,12 +146,6 @@
 			color: #404040;
 		}
 
-		#loading {
-			background-color: #FFFFFF;
-			color: #404040;
-			text-align: center;
-		}
-
 		span.loadCircle {
 			display: inline-block;
 			width: 2em;
@@ -290,15 +201,6 @@
 
 		#startStopBtn.running:before {
 			content: "Abort";
-		}
-
-		#serverArea {
-			margin-top: 1em;
-		}
-
-		#server {
-			font-size: 1em;
-			padding: 0.2em;
 		}
 
 		#test {
@@ -469,8 +371,7 @@
 		@media all and (prefers-color-scheme: dark) {
 
 			html,
-			body,
-			#loading {
+			body {
 				background: #202020;
 				color: #F4F4F4;
 				color-scheme: dark;
@@ -496,17 +397,10 @@
 	<title>Speedtest | martinjanu.eu</title>
 </head>
 
-<body onload="initServers()">
+<body onload="initUI()">
 	<h1>LibreSpeed Speedtest</h1>
-	<div id="loading" class="visible">
-		<p id="message"><span class="loadCircle"></span>Loading...</p>
-	</div>
-	<div id="testWrapper" class="hidden">
+	<div id="testWrapper" class="visible">
 		<button id="startStopBtn" onclick="startStop()" aria-label="Start"></button><br />
-		<a class="privacy" href="#" onclick="I('privacyPolicy').style.display=''">Privacy</a>
-		<div id="serverArea">
-			Server: <select id="server" onchange="s.setSelectedServer(SPEEDTEST_SERVERS[this.value])"></select>
-		</div>
 		<div id="test">
 			<div class="testGroup">
 				<div class="testArea2">
