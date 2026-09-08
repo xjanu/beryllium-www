@@ -1,0 +1,3 @@
+FROM ghcr.io/librespeed/speedtest:latest-alpine
+
+COPY index.html        /speedtest/
