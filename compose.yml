@@ -81,6 +81,19 @@ services:
       context: rng
     restart: always
 
+  speedtest:
+    container_name: speedtest
+    build:
+      dockerfile: dockerfile
+      context: speedtest
+    restart: always
+    environment:
+      MODE: standalone
+      TITLE: "LibreSpeed"
+      TAGLINE: "martinjanu.eu speedtest"
+      TELEMETRY: false
+      GDPR_EMAIL: "privacy@martinjanu.eu"
+
 volumes:
   nginx-cache:
   nginx-pid:
