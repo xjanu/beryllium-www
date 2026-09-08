@@ -63,7 +63,8 @@ services:
                 --issue \
                 -d martinjanu.eu \
                 --webroot /var/www/acme \
-                -d www.martinjanu.eu -d upgreat.martinjanu.eu;
+                -d www.martinjanu.eu \
+                -d speedtest.martinjanu.eu;
         acme.sh --install-cert \
                 -d martinjanu.eu \
                 --key-file /var/ssl/key.pem \
