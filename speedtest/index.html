@@ -10,7 +10,6 @@
 	<meta charset="UTF-8" />
 	<script type="text/javascript" src="speedtest.js"></script>
 	<script type="text/javascript" src="chart.js"></script>
-	<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 	<script type="text/javascript">
 		function I(i) { return document.getElementById(i); }
 
@@ -344,7 +343,20 @@
 
 		#test {
 			margin-top: 2em;
-			margin-bottom: 12em;
+			margin-bottom: 2em;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		div.testGroupRow {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+		}
+
+		div.testGroupColumn {
+			flex-grow: 1;
 		}
 
 		div.testMeter {
@@ -396,15 +408,16 @@
 
 		div.testChart {
 			display: inline-block;
-			width: 42em;
-			height: 24em;
 			position: relative;
 			box-sizing: border-box;
+			height: 100%;
+			width: 100%;
 		}
 
 		div.testGroup {
-			display: block;
-			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
 		}
 
 		@media all and (max-width:40em) {
@@ -418,56 +431,58 @@
 
 <body onload="initUI()">
 	<h1>Speedtest</h1>
-	<div id="testWrapper" class="visible">
-		<button id="startStopBtn" onclick="startStop()" aria-label="Start"></button><br />
-		<div id="test">
-			<div class="testGroup">
-				<div class="testGroupRow">
-					<div class="testGroupColumn">
-						<div class="testMeter">
-							<div class="testName">Ping</div>
-							<canvas id="pingMeter" class="meter"></canvas>
-							<div id="pingText" class="meterText"></div>
-							<div class="unit">ms</div>
-						</div>
-						<div class="testMeter">
-							<div class="testName">Jitter</div>
-							<canvas id="jitMeter" class="meter"></canvas>
-							<div id="jitText" class="meterText"></div>
-							<div class="unit">ms</div>
-						</div>
+	<button id="startStopBtn" onclick="startStop()" aria-label="Start"></button><br />
+	<div id="test">
+		<div class="testGroup">
+			<div class="testGroupRow">
+				<div class="testGroupColumn">
+					<div class="testMeter">
+						<div class="testName">Ping</div>
+						<canvas id="pingMeter" class="meter"></canvas>
+						<div id="pingText" class="meterText"></div>
+						<div class="unit">ms</div>
 					</div>
 				</div>
-				<div class="testGroupRow">
-					<div class="testGroupColumn">
-						<div class="testChart">
-							<canvas id="pingJitterChart"></canvas>
-						</div>
+				<div class="testGroupColumn">
+					<div class="testMeter">
+						<div class="testName">Jitter</div>
+						<canvas id="jitMeter" class="meter"></canvas>
+						<div id="jitText" class="meterText"></div>
+						<div class="unit">ms</div>
 					</div>
 				</div>
 			</div>
-			<div class="testGroup">
-				<div class="testGroupRow">
-					<div class="testGroupColumn">
-						<div class="testMeter">
-							<div class="testName">Download</div>
-							<canvas id="dlMeter" class="meter"></canvas>
-							<div id="dlText" class="meterText"></div>
-							<div class="unit">Mbit/s</div>
-						</div>
-						<div class="testMeter">
-							<div class="testName">Upload</div>
-							<canvas id="ulMeter" class="meter"></canvas>
-							<div id="ulText" class="meterText"></div>
-							<div class="unit">Mbit/s</div>
-						</div>
+			<div class="testGroupRow">
+				<div class="testGroupColumn">
+					<div class="testChart">
+						<canvas id="pingJitterChart"></canvas>
 					</div>
 				</div>
-				<div class="testGroupRow">
-					<div class="testGroupColumn">
-						<div class="testChart">
-							<canvas id="downloadUploadChart"></canvas>
-						</div>
+			</div>
+		</div>
+		<div class="testGroup">
+			<div class="testGroupRow">
+				<div class="testGroupColumn">
+					<div class="testMeter">
+						<div class="testName">Download</div>
+						<canvas id="dlMeter" class="meter"></canvas>
+						<div id="dlText" class="meterText"></div>
+						<div class="unit">Mbit/s</div>
+					</div>
+				</div>
+				<div class="testGroupColumn">
+					<div class="testMeter">
+						<div class="testName">Upload</div>
+						<canvas id="ulMeter" class="meter"></canvas>
+						<div id="ulText" class="meterText"></div>
+						<div class="unit">Mbit/s</div>
+					</div>
+				</div>
+			</div>
+			<div class="testGroupRow">
+				<div class="testGroupColumn">
+					<div class="testChart">
+						<canvas id="downloadUploadChart"></canvas>
 					</div>
 				</div>
 			</div>
