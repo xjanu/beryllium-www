@@ -74,10 +74,11 @@
 		function sum(arr) {
 			return arr.reduce((a, b) => a + b);
 		}
-		function stddev(arr, avg) {
+		function stddev(arr) {
 			if (arr.length < 5) {
 				return NaN
 			}
+			const avg = sum(arr) / arr.length
 			return Math.sqrt(sum(arr.map((a) => (a - avg)**2)) / (arr.length - 1))
 		}
 		var uiData = null;
@@ -113,8 +114,10 @@
 					uiData.pingProgress = Number(data.pingProgress)
 					if (uiData.testState == "ping") {
 						uiData.ping.push(uiData.pingStatus)
-						uiData.pingAvg = sum(uiData.ping) / uiData.ping.length
-						uiData.jitter.push(stddev(uiData.ping, uiData.pingAvg))
+						uiData.pingSum += uiData.pingStatus
+						const avg = uiData.pingSum / uiData.ping.length
+						uiData.squareErrorSum += (uiData.pingStatus - avg)**2
+						uiData.jitter.push(Math.sqrt(uiData.squareErrorSum / (uiData.ping.length - 1)))
 						uiData.pingTime.push(Number(data.pingTime))
 					}
 					if (uiData.testState == "download") {
@@ -168,7 +171,8 @@
 			}
 
 			if (uiData.testState == "finished") {
-				I("pingText").textContent = format(uiData.pingAvg);
+				I("pingText").textContent = format(uiData.pingSum / uiData.ping.length);
+				I("jitText").textContent = format(stddev(uiData.ping));
 			}
 		}
 		//update the UI every frame
@@ -185,7 +189,8 @@
 				dlStatus: null,
 				ulStatus: null,
 				ping: [],
-				pingAvg: null,
+				pingSum: 0,
+				squareErrorSum: 0,
 				jitter: [],
 				pingTime: [],
 				download: {},
