@@ -117,24 +117,24 @@
 						"5":  "aborted"
 					}
 					uiData.testState = testStateMap[data.testState]
-					uiData.dlStatus = data.dlStatus
-					uiData.ulStatus = data.ulStatus
-					uiData.pingStatus = data.pingStatus
-					uiData.jitterStatus = data.jitterStatus
-					uiData.dlProgress = data.dlProgress
-					uiData.ulProgress = data.ulProgress
-					uiData.pingProgress = data.pingProgress
+					uiData.dlStatus = Number(data.dlStatus)
+					uiData.ulStatus = Number(data.ulStatus)
+					uiData.pingStatus = Number(data.pingStatus)
+					uiData.jitterStatus = Number(data.jitterStatus)
+					uiData.dlProgress = Number(data.dlProgress)
+					uiData.ulProgress = Number(data.ulProgress)
+					uiData.pingProgress = Number(data.pingProgress)
 					if (uiData.testState == "ping") {
-						uiData.ping.push(Number(data.pingStatus))
+						uiData.ping.push(uiData.pingStatus)
 						uiData.pingAvg = sum(uiData.ping) / uiData.ping.length
 						uiData.jitter.push(stddev(uiData.ping, uiData.pingAvg))
-						uiData.pingTime.push(data.pingTime)
+						uiData.pingTime.push(Number(data.pingTime))
 					}
 					if (uiData.testState == "download") {
-						uiData.download[Math.floor(data.dlProgress * timeDownUpLoad)] = data.dlStatus;
+						uiData.download[Math.floor(uiData.dlProgress * timeDownUpLoad)] = uiData.dlStatus;
 					}
 					if (uiData.testState == "upload") {
-						uiData.upload[Math.floor(data.ulProgress * timeDownUpLoad)] = data.ulStatus;
+						uiData.upload[Math.floor(uiData.ulProgress * timeDownUpLoad)] = uiData.ulStatus;
 					}
 				};
 				s.onend = function (aborted) {
@@ -231,16 +231,22 @@
 					},
 					scales: {
 						x: {
+							type: "linear",
 							title: {
 								text: "Time (s)",
 								display: true
-							}
+							},
+							min: 0,
+							suggestedMax: 10
 						},
 						y: {
+							type: "linear",
 							title: {
 								text: "Ping, Jitter (ms)",
 								display: true
-							}
+							},
+							min: 0,
+							suggestedMax: 10
 						},
 					}
 				}
@@ -270,17 +276,23 @@
 					},
 					scales: {
 						x: {
+							type: "linear",
 							title: {
 								text: "Time (s)",
 								display: true
-							}
+							},
+							min: 0,
+							max: timeDownUpLoad
 						},
 						y: {
+							type: "linear",
 							title: {
 								text: "Download, Upload speed (Mbit/s)",
 								display: true
-							}
-						},
+							},
+							min: 0,
+							suggestedMax: 20
+						}
 					}
 				}
 			});
