@@ -204,6 +204,20 @@
 					responsive: true,
 					tooltips: {
 						enabled: false
+					},
+					scales: {
+						x: {
+							title: {
+								text: "Time (s)",
+								display: true
+							}
+						},
+						y: {
+							title: {
+								text: "Ping, Jitter (ms)",
+								display: true
+							}
+						},
 					}
 				}
 			});
@@ -286,12 +300,6 @@
 			z-index: 9;
 		}
 
-		div.testMeter2 div.testName {
-			display: block;
-			text-align: center;
-			font-size: 1.4em;
-		}
-
 		div.testMeter div.meterText {
 			position: absolute;
 			bottom: 1.55em;
@@ -299,11 +307,6 @@
 			width: 100%;
 			font-size: 2.5em;
 			z-index: 9;
-		}
-
-		div.testMeter2 div.meterText {
-			display: inline-block;
-			font-size: 2.5em;
 		}
 
 		div.meterText:empty:before {
@@ -318,10 +321,6 @@
 			z-index: 9;
 		}
 
-		div.testMeter2 div.unit {
-			display: inline-block;
-		}
-
 		div.testMeter canvas {
 			position: absolute;
 			top: 0;
@@ -329,6 +328,14 @@
 			width: 100%;
 			height: 100%;
 			z-index: 1;
+		}
+
+		div.testChart {
+			display: inline-block;
+			width: 42em;
+			height: 24em;
+			position: relative;
+			box-sizing: border-box;
 		}
 
 		div.testGroup {
