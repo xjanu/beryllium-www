@@ -80,28 +80,15 @@
 			}
 			return Math.sqrt(sum(arr.map((a) => (a - avg)**2)) / (arr.length - 1))
 		}
-		var uiData = {
-			testState: "notStarted", // -1=not started, 0=starting, 1=download test, 2=ping+jitter test, 3=upload test, 4=finished, 5=abort
-			dlStatus: null,
-			ulStatus: null,
-			ping: [],
-			pingAvg: null,
-			jitter: [],
-			pingTime: [],
-			download: {},
-			upload: {},
-			dlProgress: 0,
-			ulProgress: 0,
-			pingProgress: 0
-		};
+		var uiData = null;
 		function startStop() {
+			initUI();
 			if (s.getState() == 3) {
 				//speed test is running, abort
 				s.abort();
 				data = null;
 				I("startStopBtn").className = "";
 				I("startStopBtn").setAttribute("aria-label", "Start");
-				initUI();
 			} else {
 				//test is not running, begin
 				I("startStopBtn").className = "running";
@@ -150,7 +137,7 @@
 			if (!forced && s.getState() != 3) return;
 			if (uiData == null) return;
 
-			if (uiData.testState == "ping" || forced) {
+			if (uiData.testState == "ping") {
 
 				I("pingText").textContent = format(uiData.pingStatus);
 				drawMeter(I("pingMeter"), mbpsToAmount(Number(uiData.pingStatus)), meterBk, pingColor, Number(uiData.pingProgress), progColor);
@@ -164,7 +151,7 @@
 				pingJitterChart.update('none');
 			}
 
-			if (uiData.testState == "download" || forced) {
+			if (uiData.testState == "download") {
 				I("dlText").textContent = format(uiData.dlStatus);
 				drawMeter(I("dlMeter"), mbpsToAmount(Number(uiData.dlStatus)), meterBk, dlColor, Number(uiData.dlProgress), progColor);
 
@@ -172,7 +159,7 @@
 				downloadUploadChart.update('none');
 			}
 
-			if (uiData.testState == "upload" || forced) {
+			if (uiData.testState == "upload") {
 				I("ulText").textContent = format(uiData.ulStatus);
 				drawMeter(I("ulMeter"), mbpsToAmount(Number(uiData.ulStatus)), meterBk, ulColor, Number(uiData.ulProgress), progColor);
 
@@ -180,6 +167,9 @@
 				downloadUploadChart.update('none');
 			}
 
+			if (uiData.testState == "finished") {
+				I("pingText").textContent = format(uiData.pingAvg);
+			}
 		}
 		//update the UI every frame
 		window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || (function (callback, element) { setTimeout(callback, 1000 / 60); });
@@ -190,6 +180,21 @@
 		frame(); //start frame loop
 		//function to (re)initialize UI
 		function initUI() {
+			uiData = {
+				testState: "notStarted", // -1=not started, 0=starting, 1=download test, 2=ping+jitter test, 3=upload test, 4=finished, 5=abort
+				dlStatus: null,
+				ulStatus: null,
+				ping: [],
+				pingAvg: null,
+				jitter: [],
+				pingTime: [],
+				download: {},
+				upload: {},
+				dlProgress: 0,
+				ulProgress: 0,
+				pingProgress: 0
+			};
+
 			drawMeter(I("pingMeter"), 0, meterBk, dlColor, 0);
 			drawMeter(I("jitMeter"), 0, meterBk, ulColor, 0);
 			drawMeter(I("dlMeter"), 0, meterBk, dlColor, 0);
