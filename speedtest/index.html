@@ -21,14 +21,18 @@
 			ulColor = "#d62728";
 		var progColor = meterBk;
 		var count_ping = 20;
+		var timeDownUpLoad = 15;
 
 		//INITIALIZE SPEEDTEST
 		var s = new Speedtest(); //create speed test object
 		s.setParameter("telemetry_level", "off");
 		s.setParameter("time_auto", "off");
-		s.setParameter("count_ping", count_ping);
+		s.setParameter("count_ping_min", count_ping);
+		s.setParameter("time_dl_max", timeDownUpLoad);
+		s.setParameter("time_ul_max", timeDownUpLoad);
 
 		var pingJitterChart = null;
+		var downloadUploadChart = null;
 
 		//CODE FOR GAUGES
 		function drawMeter(c, amount, bk, fg, progress, prog) {
@@ -85,6 +89,8 @@
 			pingAvg: null,
 			jitter: [],
 			pingTime: [],
+			download: {},
+			upload: {},
 			dlProgress: 0,
 			ulProgress: 0,
 			pingProgress: 0
@@ -125,6 +131,12 @@
 						uiData.jitter.push(stddev(uiData.ping, uiData.pingAvg))
 						uiData.pingTime.push(data.pingTime)
 					}
+					if (uiData.testState == "download") {
+						uiData.download[Math.floor(data.dlProgress * timeDownUpLoad)] = data.dlStatus;
+					}
+					if (uiData.testState == "upload") {
+						uiData.upload[Math.floor(data.ulProgress * timeDownUpLoad)] = data.ulStatus;
+					}
 				};
 				s.onend = function (aborted) {
 					I("startStopBtn").className = "";
@@ -156,11 +168,17 @@
 			if (uiData.testState == "download" || forced) {
 				I("dlText").textContent = format(uiData.dlStatus);
 				drawMeter(I("dlMeter"), mbpsToAmount(Number(uiData.dlStatus)), meterBk, dlColor, Number(uiData.dlProgress), progColor);
+
+    			downloadUploadChart.data.datasets[0].data = uiData.download;
+				downloadUploadChart.update('none');
 			}
 
 			if (uiData.testState == "upload" || forced) {
 				I("ulText").textContent = format(uiData.ulStatus);
 				drawMeter(I("ulMeter"), mbpsToAmount(Number(uiData.ulStatus)), meterBk, ulColor, Number(uiData.ulProgress), progColor);
+
+    			downloadUploadChart.data.datasets[1].data = uiData.upload;
+				downloadUploadChart.update('none');
 			}
 
 		}
@@ -181,6 +199,13 @@
 			I("ulText").textContent = "";
 			I("pingText").textContent = "";
 			I("jitText").textContent = "";
+
+			if (pingJitterChart != null) {
+				pingJitterChart.destroy();
+			}
+			if (downloadUploadChart != null) {
+				downloadUploadChart.destroy();
+			}
 
 			pingJitterChart = new Chart(I("pingJitterChart"), {
 				type: 'line',
@@ -215,6 +240,45 @@
 						y: {
 							title: {
 								text: "Ping, Jitter (ms)",
+								display: true
+							}
+						},
+					}
+				}
+			});
+			downloadUploadChart = new Chart(I("downloadUploadChart"), {
+				type: 'line',
+				data: {
+					datasets: [
+						{
+							label: "Download",
+      						borderColor: dlColor,
+      						backgroundColor: dlColor,
+							data: []
+						},
+						{
+							label: "Upload",
+      						borderColor: ulColor,
+      						backgroundColor: ulColor,
+							data: []
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					tooltips: {
+						enabled: false
+					},
+					scales: {
+						x: {
+							title: {
+								text: "Time (s)",
+								display: true
+							}
+						},
+						y: {
+							title: {
+								text: "Download, Upload speed (Mbit/s)",
 								display: true
 							}
 						},
