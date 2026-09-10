@@ -612,7 +612,7 @@ function pingTest(done) {
 	// ping function
 	const doPing = function() {
 		tverb("ping");
-		pingProgress = i / settings.count_ping_min;
+		pingProgress = Math.min(i / settings.count_ping_min, (new Date().getTime() - startT) / (settings.time_ping_min * 1000));
 		prevT = new Date().getTime();
 		xhr[0] = new XMLHttpRequest();
 		xhr[0].onload = function() {
@@ -654,7 +654,7 @@ function pingTest(done) {
 
 			i++;
 			tverb("ping: " + pingStatus + " jitter: " + jitterStatus);
-			if (i < settings.count_ping_min || new Date().getTime() - startT < + settings.time_ping_min * 1000) doPing();
+			if (i < settings.count_ping_min || new Date().getTime() - startT < settings.time_ping_min * 1000) doPing();
 			else {
 				// more pings to do?
 				pingProgress = 1;
