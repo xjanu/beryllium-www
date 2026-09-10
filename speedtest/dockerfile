@@ -1,3 +1,5 @@
 FROM ghcr.io/librespeed/speedtest:latest-alpine
 
-COPY index.html        /speedtest/
+COPY index.html          /speedtest/
+COPY chart.js            /speedtest/
+COPY speedtest_worker.js /speedtest/
