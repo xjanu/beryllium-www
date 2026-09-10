@@ -160,6 +160,9 @@
 
     			downloadUploadChart.data.datasets[0].data = uiData.download;
 				downloadUploadChart.update('none');
+			} else {
+				I("pingText").textContent = format(uiData.pingSum / uiData.ping.length);
+				I("jitText").textContent = format(stddev(uiData.ping));
 			}
 
 			if (uiData.testState == "upload") {
@@ -168,11 +171,6 @@
 
     			downloadUploadChart.data.datasets[1].data = uiData.upload;
 				downloadUploadChart.update('none');
-			}
-
-			if (uiData.testState == "finished") {
-				I("pingText").textContent = format(uiData.pingSum / uiData.ping.length);
-				I("jitText").textContent = format(stddev(uiData.ping));
 			}
 		}
 		//update the UI every frame
