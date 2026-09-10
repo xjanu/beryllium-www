@@ -314,15 +314,28 @@
 			margin: 0;
 			background: #FFFFFF;
 			color: #202020;
+			min-height: 100vh;
 		}
 
 		body {
-			text-align: center;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 			font-family: "Roboto", sans-serif;
 		}
 
 		h1 {
 			color: #404040;
+		}
+
+		footer {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		p+ul, ul+p {
+			margin-top: 0em;
 		}
 
 		#startStopBtn {
@@ -367,6 +380,7 @@
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: center;
+			flex-grow: 1;
 		}
 
 		div.testGroupRow {
@@ -385,6 +399,7 @@
 			height: 12.5em;
 			position: relative;
 			box-sizing: border-box;
+			text-align: center;
 		}
 
 		div.testMeter div.testName {
@@ -508,6 +523,15 @@
 			</div>
 		</div>
 	</div>
+	<footer>
+		<p>This speedtest</p>
+		<ul>
+			<li>is inspired by <a href="https://speedtest.cesnet.cz/">CESNET Speedtest</a>,</li>
+			<li>is based on <a href="https://github.com/librespeed/speedtest">LibreSpeed</a>,</li>
+			<li>and uses <a href="https://github.com/chartjs/Chart.js">Chart.js</a>.</li>
+		</ul>
+		<p>For source code and licensing, visit <a href="https://github.com/xjanu/beryllium-www/tree/main/speedtest">this project on GitHub</a>.</p>
+	</footer>
 </body>
 
 </html>
